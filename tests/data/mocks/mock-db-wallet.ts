@@ -1,5 +1,6 @@
-import { AddWalletRepository } from '@/data/protocols'
+import { AddWalletRepository, AddWalletRepositoryParams } from '@/data/protocols'
 import { AddWalletParams } from '@/domain/usecases'
+import faker from 'faker'
 
 export const mockAddWalletRepository = (): AddWalletRepository => {
   class AddWalletRepositoryStub implements AddWalletRepository {
@@ -8,4 +9,11 @@ export const mockAddWalletRepository = (): AddWalletRepository => {
     }
   }
   return new AddWalletRepositoryStub()
+}
+
+export const mockAddWalletRepositoryParams = (): AddWalletRepositoryParams => {
+  return {
+    name: faker.random.words(),
+    accountId: faker.random.word()
+  }
 }
