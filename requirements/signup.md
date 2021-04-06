@@ -2,25 +2,21 @@
 
 > ## Caso de sucesso
 
-1. ✅ Recebe uma requisição do tipo **POST** na rota **/api/signup**
-2. ✅ Valida dados obrigatórios **name**, **email**, **password** e **passwordConfirmation**
-3. ✅ Valida que **password** e **passwordConfirmation** são iguais
-4. ✅ Valida que o campo **email** é um e-mail válido
-5. ✅ **Valida** se já existe um usuário com o email fornecido
-6. ✅ Gera uma senha **criptografada** (essa senha não pode ser descriptografada)
-7. ✅ **Cria** uma conta para o usuário com os dados informados, **substituindo** a senha pela senha criptorafada
-8. ✅ Gera um **token** de acesso a partir do ID do usuário
-9. ✅ **Atualiza** os dados do usuário com o token de acesso gerado
-10. ✅ Retorna **200** com o token de acesso e o nome do usuário
+1. ✅ Receives a **POST** request on api/signup**
+2. ✅ Validates required fields **name**, **email**, **password** and **passwordConfirmation**
+3. ✅ Validates that the **password** and **passwordConfirmation** are equal
+4. ✅ Validates that **email** is valid
+5. ✅ **Validates** if the provided email is already in use
+6. ✅ Generates a **encrypted** password (this password can't be decrypted)
+7. ✅ **Creates** an user account with provided data, **reaplacing** the plain password for the encrypted password
+8. ✅ Generates an access **token** from user ID
+9. ✅ **Updates** user data with the generated access token
+10. ✅ Returns **200** with access token and user name
 
 > ## Exceções
 
-1. ✅ Retorna erro **404** se a API não existir
-2. ✅ Retorna erro **400** se name, email, password ou passwordConfirmation não forem fornecidos pelo client
-3. ✅ Retorna erro **400** se password e passwordConfirmation não forem iguais
-4. ✅ Retorna erro **400** se o campo email for um e-mail inválido
-5. ✅ Retorna erro **403** se o email fornecido já estiver em uso
-6. ✅ Retorna erro **500** se der erro ao tentar gerar uma senha criptografada
-7. ✅ Retorna erro **500** se der erro ao tentar criar a conta do usuário
-8. ✅ Retorna erro **500** se der erro ao tentar gerar o token de acesso
-9. ✅ Retorna erro **500** se der erro ao tentar atualizar o usuário com o token de acesso gerado
+1. ✅ Returns **400** if the name, email, password or passwordConfirmation aren't provided
+2. ✅ Returns **400** if the password e passwordConfirmation aren't equal
+3. ✅ Returns **400** if the email is invalid
+4. ✅ Returns **403** if the provided email is already in use
+5. ✅ Returns **500** on unexpected server error
