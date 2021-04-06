@@ -3,7 +3,7 @@
 > ## Success case
 
 1. ✅ Receives a **POST** request on **/api/wallets**
-2. ✅ Validates with a request was made by **admin**
+2. ✅ Validates with a request was made by an authorized user
 3. ✅ Validates required field **name**
 4. ✅ **Creates** an wallet with provided data
 5. ✅ Returns **204** on success, no content

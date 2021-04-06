@@ -8,7 +8,7 @@
 4. ✅ Validates that **email** is valid
 5. ✅ **Validates** if the provided email is already in use
 6. ✅ Generates a **encrypted** password (this password can't be decrypted)
-7. ✅ **Creates** an user account with provided data, **reaplacing** the plain password for the encrypted password
+7. ✅ **Creates** an user account with provided data, **replacing** the plain password for the encrypted password
 8. ✅ Generates an access **token** from user ID
 9. ✅ **Updates** user data with the generated access token
 10. ✅ Returns **200** with access token and user name
