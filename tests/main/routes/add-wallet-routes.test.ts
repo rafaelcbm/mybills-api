@@ -53,7 +53,7 @@ describe('Wallet Routes', () => {
         .expect(403)
     })
 
-    test('Should return 204 on add survey with valid accessToken', async () => {
+    test('Should return 204 on add wallet with valid accessToken', async () => {
       const accessToken = await mockAccessToken()
       await request(app)
         .post('/api/wallets')
