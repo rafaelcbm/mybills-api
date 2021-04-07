@@ -7,6 +7,10 @@ export class DbLoadWallets implements LoadWallets {
   ) { }
 
   async loadAll (accountId: string): Promise<LoadWalletsResult[]> {
-    return this.loadWalletRepository.loadAll(accountId)
+    const walletsDbResult = await this.loadWalletRepository.loadAll(accountId)
+    return walletsDbResult.map(walletModel => {
+      const { accountId, ...wallet } = walletModel
+      return wallet
+    })
   }
 }
