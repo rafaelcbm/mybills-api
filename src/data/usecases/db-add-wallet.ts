@@ -1,5 +1,5 @@
 import { AddWallet, AddWalletParams } from '@/domain/usecases/add-wallet'
-import { AddWalletRepository } from '../protocols/db/wallet/add-wallet-repository'
+import { AddWalletRepository } from '@/data/protocols'
 
 export class DbAddWallet implements AddWallet {
   constructor (

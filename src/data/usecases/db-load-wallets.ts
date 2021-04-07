@@ -1,5 +1,5 @@
 import { LoadWallets, LoadWalletsResult } from '@/domain/usecases/load-wallets'
-import { LoadWalletsRepository } from '../protocols'
+import { LoadWalletsRepository } from '@/data/protocols'
 
 export class DbLoadWallets implements LoadWallets {
   constructor (
