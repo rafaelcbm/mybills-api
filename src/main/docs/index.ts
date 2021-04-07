@@ -3,11 +3,12 @@ import components from './components'
 import schemas from './schemas'
 
 export default {
-  openapi: '1.0.0',
+  openapi: '3.0.0',
   info: {
     title: 'My Bills API',
     description: 'Swagger documentation of My Bills API.',
     version: '1.0.0',
+    swagger: '2.0',
     contact: {
       name: 'Rafael Correia',
       email: 'rafaelcbm@gmail.com',
@@ -29,6 +30,9 @@ export default {
   tags: [{
     name: 'Login',
     description: 'Auth related APIs'
+  }, {
+    name: 'Wallets',
+    description: 'APIs related to Wallets, responsible for grouping the bills'
   }],
   paths,
   schemas,
