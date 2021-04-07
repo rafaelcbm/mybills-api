@@ -8,7 +8,7 @@ export class AddWalletController implements Controller {
     private readonly addWallet: AddWallet
   ) {}
 
-  async handle (request: AddWalletControllerResquest): Promise<HttpResponse> {
+  async handle (request: AddWalletControllerRequest): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(request)
       if (error) {
@@ -24,7 +24,7 @@ export class AddWalletController implements Controller {
   }
 }
 
-export type AddWalletControllerResquest = {
+export type AddWalletControllerRequest = {
   accountId: string
   name: string
 }

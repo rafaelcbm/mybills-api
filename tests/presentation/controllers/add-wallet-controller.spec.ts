@@ -1,11 +1,11 @@
 import { AddWallet } from '@/domain/usecases'
 import faker from 'faker'
-import { AddWalletController, AddWalletControllerResquest } from '@/presentation/controllers'
+import { AddWalletController, AddWalletControllerRequest } from '@/presentation/controllers'
 import { mockAddWallet, ValidationSpy } from '../mocks'
 import { badRequest, noContent, serverError } from '@/presentation/helpers'
 import { throwError } from '@/tests/domain/mocks'
 
-const mockRequest = (): AddWalletControllerResquest => ({
+const mockRequest = (): AddWalletControllerRequest => ({
   accountId: faker.random.word(),
   name: faker.random.words()
 })
