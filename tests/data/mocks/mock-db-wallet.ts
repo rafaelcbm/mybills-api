@@ -29,10 +29,12 @@ export const mockLoadWalletsRepository = (): LoadWalletsRepository => {
 
 export const mockLoadWalletRepositoryResult = (): LoadWalletRepositoryResult[] => {
   return [{
+    id: faker.random.word(),
     name: faker.random.words(),
     accountId: faker.random.word()
   },
   {
+    id: faker.random.word(),
     name: faker.random.words(),
     accountId: faker.random.word()
   }]
