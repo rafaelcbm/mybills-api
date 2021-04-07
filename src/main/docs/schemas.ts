@@ -2,12 +2,18 @@ import {
   accountSchema,
   loginParamsSchema,
   errorSchema,
-  signUpParamsSchema
+  signUpParamsSchema,
+  addWalletParamsSchema,
+  walletSchema,
+  walletsSchema
 } from './schemas/'
 
 export default {
   account: accountSchema,
   loginParams: loginParamsSchema,
   signUpParams: signUpParamsSchema,
-  error: errorSchema
+  error: errorSchema,
+  addWalletParams: addWalletParamsSchema,
+  wallet: walletSchema,
+  wallets: walletsSchema
 }

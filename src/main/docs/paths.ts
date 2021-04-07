@@ -1,9 +1,11 @@
 import {
   loginPath,
-  signUpPath
+  signUpPath,
+  walletPath
 } from './paths/'
 
 export default {
   '/login': loginPath,
-  '/signup': signUpPath
+  '/signup': signUpPath,
+  '/wallets': walletPath
 }
