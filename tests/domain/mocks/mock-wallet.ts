@@ -12,11 +12,9 @@ export const mockAddWalletParams = (): AddWalletParams => {
 export const mockLoadWalletsResult = (): LoadWalletsResult[] => {
   return [{
     id: faker.random.word(),
-    name: faker.random.words(),
-    accountId: faker.random.word()
+    name: faker.random.words()
   },{
     id: faker.random.word(),
-    name: faker.random.words(),
-    accountId: faker.random.word()
+    name: faker.random.words()
   }]
 }

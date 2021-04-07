@@ -1,6 +1,6 @@
-import { LoadWalletsResult } from '@/domain/usecases/load-wallets'
+import { WalletModel } from '@/domain/models'
 
-export type LoadWalletRepositoryResult = LoadWalletsResult
+export type LoadWalletRepositoryResult = WalletModel
 
 export interface LoadWalletsRepository {
   loadAll: (accountId: string) => Promise<LoadWalletRepositoryResult[]>
