@@ -1,3 +1,6 @@
 export * from './db-add-account'
 export * from './db-authentication'
 export * from './db-load-account-by-token'
+export * from './db-add-wallet'
+export * from './db-load-wallets'
+export * from './db-remove-wallet'
