@@ -16,9 +16,9 @@ export class WalletMongoRepository implements AddWalletRepository, LoadWalletsRe
 
   async remove (id: string, accountId: string): Promise<WalletModel> {
     const walletCollection = await MongoHelper.getCollection('wallets')
-    const removedWallet = await walletCollection.findOneAndDelete({ id, accountId })
-    if (removedWallet) {
-      return MongoHelper.map(removedWallet)
+    const removedWallet = await walletCollection.findOneAndDelete({ _id: id, accountId })
+    if (removedWallet.ok && removedWallet.value) {
+      return MongoHelper.map(removedWallet.value)
     }
   }
 }
