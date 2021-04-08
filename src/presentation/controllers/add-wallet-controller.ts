@@ -9,18 +9,14 @@ export class AddWalletController implements Controller {
   ) {}
 
   async handle (request: AddWalletControllerRequest): Promise<HttpResponse> {
-    try {
-      const error = this.validation.validate(request)
-      if (error) {
-        return badRequest(error)
-      }
-      await this.addWallet.add({
-        ...request
-      })
-      return noContent()
-    } catch (error) {
-      return serverError(error)
+    const error = this.validation.validate(request)
+    if (error) {
+      return badRequest(error)
     }
+    await this.addWallet.add({
+      ...request
+    })
+    return noContent()
   }
 }
 

@@ -40,8 +40,15 @@ describe('SignUp Controller', () => {
   test('Should return 500 if AddAccount throws', async () => {
     const { sut, addAccountSpy } = makeSut()
     jest.spyOn(addAccountSpy, 'add').mockImplementationOnce(throwError)
-    const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(serverError(new ServerError(null)))
+    const httpResponse = sut.handle(mockRequest())
+    await expect(httpResponse).rejects.toThrow()
+  })
+
+  test('Should return 500 if Authentication throws', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    jest.spyOn(authenticationSpy, 'auth').mockImplementationOnce(throwError)
+    const httpResponse = sut.handle(mockRequest())
+    await expect(httpResponse).rejects.toThrow()
   })
 
   test('Should call AddAccount with correct values', async () => {
@@ -90,12 +97,5 @@ describe('SignUp Controller', () => {
       email: request.email,
       password: request.password
     })
-  })
-
-  test('Should return 500 if Authentication throws', async () => {
-    const { sut, authenticationSpy } = makeSut()
-    jest.spyOn(authenticationSpy, 'auth').mockImplementationOnce(throwError)
-    const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })

@@ -35,8 +35,8 @@ describe('LoadWallets Controller', () => {
   test('Should return 500 if LoadWallets throws', async () => {
     const { sut, loadWalletsMock } = makeSut()
     jest.spyOn(loadWalletsMock, 'loadAll').mockImplementationOnce(throwError)
-    const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(serverError(new Error()))
+    const httpResponse = sut.handle(mockRequest())
+    await expect(httpResponse).rejects.toThrow()
   })
 
   test('Should return 200 on success', async () => {

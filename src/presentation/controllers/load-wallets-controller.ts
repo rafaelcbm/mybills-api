@@ -8,12 +8,8 @@ export class LoadWalletsController implements Controller {
   ) {}
 
   async handle (request: LoadWalletsControllerRequest): Promise<HttpResponse> {
-    try {
-      const wallets = await this.loadWallets.loadAll(request.accountId)
-      return ok(wallets)
-    } catch (error) {
-      return serverError(error)
-    }
+    const wallets = await this.loadWallets.loadAll(request.accountId)
+    return ok(wallets)
   }
 }
 

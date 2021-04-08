@@ -9,19 +9,15 @@ export class LoginController implements Controller {
   ) {}
 
   async handle (request: LoginController.Request): Promise<HttpResponse> {
-    try {
-      const error = this.validation.validate(request)
-      if (error) {
-        return badRequest(error)
-      }
-      const authenticationModel = await this.authentication.auth(request)
-      if (!authenticationModel) {
-        return unauthorized()
-      }
-      return ok(authenticationModel)
-    } catch (error) {
-      return serverError(error)
+    const error = this.validation.validate(request)
+    if (error) {
+      return badRequest(error)
     }
+    const authenticationModel = await this.authentication.auth(request)
+    if (!authenticationModel) {
+      return unauthorized()
+    }
+    return ok(authenticationModel)
   }
 }
 
