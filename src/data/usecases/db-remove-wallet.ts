@@ -9,7 +9,7 @@ export class DbRemoveWallet implements RemoveWallet {
   ) {}
 
   async remove (walletId: string, accountId: string): Promise<void> {
-    if (!this.removeWalletRepository.remove(walletId, accountId)) {
+    if (!await this.removeWalletRepository.remove(walletId, accountId)) {
       throw new BadRequestError(WALLET_NOT_FOUND)
     }
   }
