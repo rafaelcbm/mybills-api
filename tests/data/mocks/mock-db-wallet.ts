@@ -1,4 +1,4 @@
-import { AddWalletRepository, AddWalletRepositoryParams, LoadWalletsRepository, LoadWalletRepositoryResult } from '@/data/protocols'
+import { AddWalletRepository, AddWalletRepositoryParams, LoadWalletRepositoryResult, LoadWalletsRepository, RemoveWalletRepository, RemoveWalletRepositoryResult } from '@/data/protocols'
 import { AddWalletParams } from '@/domain/usecases'
 import faker from 'faker'
 
@@ -38,4 +38,21 @@ export const mockLoadWalletRepositoryResult = (): LoadWalletRepositoryResult[] =
     name: faker.random.words(),
     accountId: faker.random.word()
   }]
+}
+
+export const mockRemoveWalletRepository = (): RemoveWalletRepository => {
+  class RemoveWalletRepositoryStub implements RemoveWalletRepository {
+    async remove (walletId: string, accountId: string): Promise<RemoveWalletRepositoryResult> {
+      return Promise.resolve(mockRemoveWalletRepositoryResult())
+    }
+  }
+  return new RemoveWalletRepositoryStub()
+}
+
+export const mockRemoveWalletRepositoryResult = (): RemoveWalletRepositoryResult => {
+  return {
+    id: faker.random.word(),
+    name: faker.random.words(),
+    accountId: faker.random.word()
+  }
 }
