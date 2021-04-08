@@ -1,5 +1,5 @@
 import { AddWalletRepository } from '@/data/protocols'
-import { DbAddWallet } from '@/data/usecases/db-add-wallet'
+import { DbAddWallet } from '@/data/usecases'
 import { mockAddWalletRepository } from '@/tests/data/mocks'
 import { throwError } from '@/tests/domain/mocks'
 import { mockAddWalletParams } from '@/tests/domain/mocks/mock-wallet'
