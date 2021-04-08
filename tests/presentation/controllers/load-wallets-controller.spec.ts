@@ -1,7 +1,6 @@
 import { LoadWallets } from '@/domain/usecases/load-wallets'
 import { LoadWalletsController, LoadWalletsControllerRequest } from '@/presentation/controllers'
-import { ok, serverError } from '@/presentation/helpers'
-import { mockLoadWalletsResult, throwError } from '@/tests/domain/mocks'
+import { throwError } from '@/tests/domain/mocks'
 import faker from 'faker'
 import { mockLoadWallets } from '../mocks'
 

@@ -1,5 +1,5 @@
 import { AddWallet } from '@/domain/usecases'
-import { badRequest, noContent, serverError } from '@/presentation/helpers'
+import { badRequest, noContent } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddWalletController implements Controller {

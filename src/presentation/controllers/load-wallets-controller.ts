@@ -1,5 +1,5 @@
 import { LoadWallets } from '@/domain/usecases/load-wallets'
-import { ok, serverError } from '@/presentation/helpers'
+import { ok } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 
 export class LoadWalletsController implements Controller {
