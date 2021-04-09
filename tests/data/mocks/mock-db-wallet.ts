@@ -1,4 +1,4 @@
-import { AddWalletRepository, AddWalletRepositoryParams, LoadWalletRepositoryResult, LoadWalletsRepository, RemoveWalletRepository, RemoveWalletRepositoryResult } from '@/data/protocols'
+import { AddWalletRepository, AddWalletRepositoryParams, LoadWalletRepositoryResult, LoadWalletsRepository, RemoveWalletRepository, RemoveWalletRepositoryResult, UpdateWalletRepository, UpdateWalletRepositoryParams, UpdateWalletRepositoryResult } from '@/data/protocols'
 import { AddWalletParams } from '@/domain/usecases'
 import faker from 'faker'
 
@@ -50,6 +50,31 @@ export const mockRemoveWalletRepository = (): RemoveWalletRepository => {
 }
 
 export const mockRemoveWalletRepositoryResult = (): RemoveWalletRepositoryResult => {
+  return {
+    id: faker.random.word(),
+    name: faker.random.words(),
+    accountId: faker.random.word()
+  }
+}
+
+export const mockUpdateWalletRepository = (): UpdateWalletRepository => {
+  class UpdateWalletRepositoryStub implements UpdateWalletRepository {
+    async update (updateWalletRepositoryParams: UpdateWalletRepositoryParams): Promise<UpdateWalletRepositoryResult> {
+      return Promise.resolve(mockUpdateWalletRepositoryResult())
+    }
+  }
+  return new UpdateWalletRepositoryStub()
+}
+
+export const mockUpdateWalletRepositoryParams = (): UpdateWalletRepositoryParams => {
+  return {
+    id: faker.random.word(),
+    name: faker.random.words(),
+    accountId: faker.random.word()
+  }
+}
+
+export const mockUpdateWalletRepositoryResult = (): UpdateWalletRepositoryResult => {
   return {
     id: faker.random.word(),
     name: faker.random.words(),
