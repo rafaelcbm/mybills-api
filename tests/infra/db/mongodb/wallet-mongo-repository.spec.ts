@@ -1,8 +1,8 @@
 import { MongoHelper, WalletMongoRepository } from '@/infra/db'
 import { mockAddWalletRepositoryParams } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
+import FakeObjectId from 'bson-objectid'
 import { Collection } from 'mongodb'
-import faker from 'faker'
 
 let walletCollection: Collection
 let accountCollection: Collection
@@ -99,7 +99,7 @@ describe('WalletMongoRepository', () => {
       expect(insertedWalletsResult.ops.length).toBe(2)
 
       const sut = makeSut()
-      const removedWalllet = await sut.remove(faker.random.word(), accountId)
+      const removedWalllet = await sut.remove(FakeObjectId.generate(), accountId)
       expect(removedWalllet).toBeUndefined()
     })
   })
