@@ -1,6 +1,7 @@
-import { RemoveWallet, AddWalletParams, AddWallet } from '@/domain/usecases'
+import { WalletModel } from '@/domain/models'
+import { RemoveWallet, AddWalletParams, AddWallet, UpdateWallet } from '@/domain/usecases'
 import { LoadWallets, LoadWalletsResult } from '@/domain/usecases/load-wallets'
-import { mockLoadWalletsResult } from '@/tests/domain/mocks'
+import { mockLoadWalletsResult , mockWalletModel } from '@/tests/domain/mocks'
 
 export const mockAddWallet = (): AddWallet => {
   class AddWalletStub implements AddWallet {
@@ -27,4 +28,13 @@ export const mockRemoveWallet = (): RemoveWallet => {
     }
   }
   return new RemoveWalletStub()
+}
+
+export const mockUpdateWallet = (): UpdateWallet => {
+  class UpdateWalletStub implements UpdateWallet {
+    async update (updateWalletParams: WalletModel): Promise<WalletModel> {
+      return mockWalletModel()
+    }
+  }
+  return new UpdateWalletStub()
 }
