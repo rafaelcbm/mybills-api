@@ -1,6 +1,6 @@
-# Cadastro
+# Signup
 
-> ## Caso de sucesso
+> ## Success case
 
 1. ✅ Receives a **POST** request on api/signup**
 2. ✅ Validates required fields **name**, **email**, **password** and **passwordConfirmation**
