@@ -33,7 +33,7 @@ export const walletPath = {
       apiKeyAuth: []
     }],
     tags: ['Wallets'],
-    summary: 'API to create a user wallet',
+    summary: 'API to create an user wallet',
     description: 'This route must be accessible by **authenticated users**',
     requestBody: {
       required: true,
