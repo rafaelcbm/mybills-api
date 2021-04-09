@@ -5,6 +5,7 @@ import { sign } from 'jsonwebtoken'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 import FakeObjectId from 'bson-objectid'
+import faker from 'faker'
 
 let walletCollection: Collection
 let accountCollection: Collection
@@ -48,7 +49,7 @@ describe('Wallet Routes', () => {
       await request(app)
         .post('/api/wallets')
         .send({
-          name: 'Wallet 1'
+          name: faker.random.word()
         })
         .expect(403)
     })
@@ -59,7 +60,7 @@ describe('Wallet Routes', () => {
         .post('/api/wallets')
         .set('x-access-token', accessToken)
         .send({
-          name: 'Wallet 1'
+          name: faker.random.word()
         })
         .expect(204)
     })
@@ -86,7 +87,7 @@ describe('Wallet Routes', () => {
       await request(app)
         .delete('/api/wallets/any_id')
         .send({
-          walletId: 'Wallet 1'
+          walletId: faker.random.word()
         })
         .expect(403)
     })
@@ -94,7 +95,7 @@ describe('Wallet Routes', () => {
     test('Should return 204 on remove wallet with valid accessToken', async () => {
       const { accessToken, id } = await mockAccessToken()
       const res = await walletCollection.insertOne({
-        name: 'any_name',
+        name: faker.random.word(),
         accountId: id
       })
       const walletId = res.ops[0]._id
@@ -110,6 +111,57 @@ describe('Wallet Routes', () => {
       const { accessToken } = await mockAccessToken()
       await request(app)
         .delete(`/api/wallets/${FakeObjectId.generate()}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
+    })
+  })
+
+  describe('PUT /wallets', () => {
+    test('Should return 403 on update wallet without accessToken', async () => {
+      await request(app)
+        .put('/api/wallets/any_id')
+        .send({
+          walletId: faker.random.word()
+        })
+        .expect(403)
+    })
+
+    test('Should return 200 on update wallet with valid params', async () => {
+      const { accessToken, id } = await mockAccessToken()
+      const res = await walletCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const walletId = res.ops[0]._id
+
+      await request(app)
+        .put(`/api/wallets/${walletId}`)
+        .set('x-access-token', accessToken)
+        .send({ name: faker.random.word() })
+        .expect(200)
+    })
+
+    test('Should return 400 on update wallet without walletId', async () => {
+      const { accessToken } = await mockAccessToken()
+
+      await request(app)
+        .put(`/api/wallets/${FakeObjectId.generate()}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
+    })
+
+    test('Should return 400 on update wallet without name', async () => {
+      const { accessToken, id } = await mockAccessToken()
+      const res = await walletCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const walletId = res.ops[0]._id
+
+      await request(app)
+        .put(`/api/wallets/${walletId}`)
         .set('x-access-token', accessToken)
         .send()
         .expect(400)
