@@ -1,15 +1,15 @@
 import app from '@/main/config/app'
 import env from '@/main/config/env'
 import { MongoHelper } from '@/infra/db'
-
 import { sign } from 'jsonwebtoken'
 import { Collection } from 'mongodb'
 import request from 'supertest'
+import FakeObjectId from 'bson-objectid'
 
 let walletCollection: Collection
 let accountCollection: Collection
 
-const mockAccessToken = async (): Promise<string> => {
+const mockAccessToken = async (): Promise<any> => {
   const res = await accountCollection.insertOne({
     name: 'Rafael',
     email: 'rafaelcbm@gmail.com',
@@ -24,7 +24,7 @@ const mockAccessToken = async (): Promise<string> => {
       accessToken
     }
   })
-  return accessToken
+  return { accessToken, id }
 }
 
 describe('Wallet Routes', () => {
@@ -54,7 +54,7 @@ describe('Wallet Routes', () => {
     })
 
     test('Should return 204 on add wallet with valid accessToken', async () => {
-      const accessToken = await mockAccessToken()
+      const { accessToken } = await mockAccessToken()
       await request(app)
         .post('/api/wallets')
         .set('x-access-token', accessToken)
@@ -73,11 +73,46 @@ describe('Wallet Routes', () => {
     })
 
     test('Should return 200 on load wallets with valid accessToken', async () => {
-      const accessToken = await mockAccessToken()
+      const { accessToken } = await mockAccessToken()
       await request(app)
         .get('/api/wallets')
         .set('x-access-token', accessToken)
         .expect(200)
+    })
+  })
+
+  describe('DELETE /wallets', () => {
+    test('Should return 403 on remove wallet without accessToken', async () => {
+      await request(app)
+        .delete('/api/wallets/any_id')
+        .send({
+          walletId: 'Wallet 1'
+        })
+        .expect(403)
+    })
+
+    test('Should return 204 on remove wallet with valid accessToken', async () => {
+      const { accessToken, id } = await mockAccessToken()
+      const res = await walletCollection.insertOne({
+        name: 'any_name',
+        accountId: id
+      })
+      const walletId = res.ops[0]._id
+
+      await request(app)
+        .delete(`/api/wallets/${walletId}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(204)
+    })
+
+    test('Should return 400 on remove wallet without walletId', async () => {
+      const { accessToken } = await mockAccessToken()
+      await request(app)
+        .delete(`/api/wallets/${FakeObjectId.generate()}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
     })
   })
 })
