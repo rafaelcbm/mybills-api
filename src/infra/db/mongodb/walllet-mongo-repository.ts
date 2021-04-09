@@ -1,6 +1,7 @@
-import { AddWalletRepository, AddWalletRepositoryParams, LoadWalletsRepository, LoadWalletRepositoryResult, RemoveWalletRepository } from '@/data/protocols/db'
+import { AddWalletRepository, AddWalletRepositoryParams, LoadWalletRepositoryResult, LoadWalletsRepository, RemoveWalletRepository } from '@/data/protocols/db'
 import { WalletModel } from '@/domain/models'
 import { MongoHelper } from '@/infra/db'
+import { ObjectId } from 'mongodb'
 
 export class WalletMongoRepository implements AddWalletRepository, LoadWalletsRepository, RemoveWalletRepository {
   async add (walletParam: AddWalletRepositoryParams): Promise<void> {
@@ -16,7 +17,8 @@ export class WalletMongoRepository implements AddWalletRepository, LoadWalletsRe
 
   async remove (id: string, accountId: string): Promise<WalletModel> {
     const walletCollection = await MongoHelper.getCollection('wallets')
-    const removedWallet = await walletCollection.findOneAndDelete({ _id: id, accountId })
+    const removedWallet = await walletCollection.findOneAndDelete({ _id: new ObjectId(id), accountId })
+
     if (removedWallet.ok && removedWallet.value) {
       return MongoHelper.map(removedWallet.value)
     }
