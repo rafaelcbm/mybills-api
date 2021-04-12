@@ -1,4 +1,4 @@
-import { LoadWallets } from '@/domain/usecases/load-wallets'
+import { LoadWallets } from '@/domain/usecases/wallet/load-wallets'
 import { ok } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 

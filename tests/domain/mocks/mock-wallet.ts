@@ -1,6 +1,6 @@
 import { AddWalletParams } from '@/domain/usecases'
 import { WalletModel } from '@/domain/models'
-import { LoadWalletsResult } from '@/domain/usecases/load-wallets'
+import { LoadWalletsResult } from '@/domain/usecases/wallet/load-wallets'
 import faker from 'faker'
 
 export const mockAddWalletParams = (): AddWalletParams => {

@@ -1,6 +1,4 @@
 export * from './add-account'
 export * from './authentication'
 export * from './load-account-by-token'
-export * from './add-wallet'
-export * from './remove-wallet'
-export * from './update-wallet'
+export * from './wallet'

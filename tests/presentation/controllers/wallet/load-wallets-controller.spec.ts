@@ -1,8 +1,8 @@
-import { LoadWallets } from '@/domain/usecases/load-wallets'
+import { LoadWallets } from '@/domain/usecases/wallet/load-wallets'
 import { LoadWalletsController, LoadWalletsControllerRequest } from '@/presentation/controllers'
 import { throwError } from '@/tests/domain/mocks'
+import { mockLoadWallets } from '@/tests/presentation/mocks'
 import faker from 'faker'
-import { mockLoadWallets } from '../mocks'
 
 const mockRequest = (): LoadWalletsControllerRequest => ({
   accountId: faker.random.word()

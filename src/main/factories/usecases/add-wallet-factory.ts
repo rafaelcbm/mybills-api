@@ -1,4 +1,4 @@
-import { DbAddWallet } from '@/data/usecases/db-add-wallet'
+import { DbAddWallet } from '@/data/usecases'
 import { AddWallet } from '@/domain/usecases'
 import { WalletMongoRepository } from '@/infra/db'
 

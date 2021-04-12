@@ -2,7 +2,7 @@ import { LoadWalletsRepository } from '@/data/protocols'
 import { mockLoadWalletsRepository } from '@/tests/data/mocks'
 import { throwError } from '@/tests/domain/mocks'
 import faker from 'faker'
-import { DbLoadWallets } from '@/data/usecases/db-load-wallets'
+import { DbLoadWallets } from '@/data/usecases'
 
 type SutTypes = {
   sut: DbLoadWallets

@@ -1,4 +1,4 @@
-import { AddWallet, AddWalletParams } from '@/domain/usecases/add-wallet'
+import { AddWallet, AddWalletParams } from '@/domain/usecases/'
 import { AddWalletRepository } from '@/data/protocols'
 
 export class DbAddWallet implements AddWallet {
