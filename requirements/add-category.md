@@ -12,4 +12,5 @@
 
 1. ✅ Returns **403** on unauthorized access
 2. ✅ Returns **400** if the user doesn't provide required data
+2. ✅ Returns **400** if the category name already exists
 3. ✅ Returns **500** on unexpected server error
