@@ -1,6 +1,6 @@
 import { RemoveWalletRepository } from '@/data/protocols'
 import { DbRemoveWallet } from '@/data/usecases'
-import { BadRequestError } from '@/domain/errors'
+import { GenericBusinessError } from '@/domain/errors'
 import { WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { mockRemoveWalletRepository } from '@/tests/data/mocks'
 import { throwError } from '@/tests/domain/mocks'
@@ -45,6 +45,6 @@ describe('DbRemoveWallet Usecase', () => {
     const accountId = faker.random.word()
     const wallletId = faker.random.word()
     const expectedErrorPromise = sut.remove(accountId, wallletId)
-    await expect(expectedErrorPromise).rejects.toThrowError(new BadRequestError(WALLET_NOT_FOUND))
+    await expect(expectedErrorPromise).rejects.toThrowError(new GenericBusinessError(WALLET_NOT_FOUND))
   })
 })

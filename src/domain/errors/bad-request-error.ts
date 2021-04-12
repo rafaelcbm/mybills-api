@@ -1,6 +1,6 @@
-export class BadRequestError extends Error {
+export class GenericBusinessError extends Error {
   constructor (message: string) {
     super(message)
-    this.name = 'BadRequestError'
+    this.name = 'GenericBusinessError'
   }
 }

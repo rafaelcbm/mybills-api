@@ -1,6 +1,6 @@
 import { UpdateWallet } from '@/domain/usecases'
 import { UpdateWalletRepository } from '@/data/protocols'
-import { BadRequestError } from '@/domain/errors'
+import { GenericBusinessError } from '@/domain/errors'
 import { WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { WalletModel } from '@/domain/models'
 
@@ -12,7 +12,7 @@ export class DbUpdateWallet implements UpdateWallet {
   async update (wallet: WalletModel): Promise<WalletModel> {
     const updatedWallet = await this.updateWalletRepository.update(wallet)
     if (!updatedWallet) {
-      throw new BadRequestError(WALLET_NOT_FOUND)
+      throw new GenericBusinessError(WALLET_NOT_FOUND)
     }
     return updatedWallet
   }

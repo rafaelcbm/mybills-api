@@ -1,6 +1,6 @@
 import { UpdateWalletRepository } from '@/data/protocols'
 import { DbUpdateWallet } from '@/data/usecases'
-import { BadRequestError } from '@/domain/errors'
+import { GenericBusinessError } from '@/domain/errors'
 import { WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { mockWalletModel, throwError } from '@/tests/domain/mocks'
 import { mockUpdateWalletRepository } from '@/tests/data/mocks'
@@ -51,6 +51,6 @@ describe('DbUpdateWallet Usecase', () => {
     jest.spyOn(updateWalletRepositoryStub, 'update').mockReturnValueOnce(Promise.resolve(null))
     const walletModel = mockWalletModel()
     const expectedErrorPromise = sut.update(walletModel)
-    await expect(expectedErrorPromise).rejects.toThrowError(new BadRequestError(WALLET_NOT_FOUND))
+    await expect(expectedErrorPromise).rejects.toThrowError(new GenericBusinessError(WALLET_NOT_FOUND))
   })
 })

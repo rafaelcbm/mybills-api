@@ -1,6 +1,6 @@
 import { Controller, HttpResponse } from '@/presentation/protocols'
 import { LogErrorRepository } from '@/data/protocols/db'
-import { BadRequestError } from '@/domain/errors'
+import { GenericBusinessError } from '@/domain/errors'
 import { badRequest, serverError } from '@/presentation/helpers'
 
 export class ErrorHandlerControllerDecorator implements Controller {
@@ -13,7 +13,7 @@ export class ErrorHandlerControllerDecorator implements Controller {
     try {
       return await this.controller.handle(request)
     } catch (error) {
-      if (error instanceof BadRequestError) {
+      if (error instanceof GenericBusinessError) {
         return badRequest(error)
       } else {
         await this.logErrorRepository.logError(error.stack)

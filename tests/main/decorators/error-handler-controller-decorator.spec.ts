@@ -4,7 +4,7 @@ import { serverError, ok, badRequest } from '@/presentation/helpers'
 import { LogErrorRepositorySpy } from '@/tests/data/mocks'
 
 import faker from 'faker'
-import { BadRequestError } from '@/domain/errors'
+import { GenericBusinessError } from '@/domain/errors'
 import { ServerError } from '@/presentation/errors'
 
 class ControllerSpy implements Controller {
@@ -24,7 +24,7 @@ const mockServerErrorResponse = (): HttpResponse => {
 }
 
 const mockBadRequestErrorResponse = (): HttpResponse => {
-  const fakeBadRequestError = new BadRequestError('any error message')
+  const fakeBadRequestError = new GenericBusinessError('any error message')
   return badRequest(fakeBadRequestError)
 }
 
@@ -77,11 +77,11 @@ describe('ErrorHandlerControllerDecorator Decorator', () => {
     expect(httpResponse).toEqual(serverErrorResponse)
   })
 
-  test('Should return a bad request response with the BadRequestError message thrown by the controller', async () => {
+  test('Should return a bad request error response with the GenericBusinessError message thrown by the controller', async () => {
     const { sut, controllerSpy } = makeSut()
     const badRequestResponse = mockBadRequestErrorResponse()
     jest.spyOn(controllerSpy, 'handle')
-      .mockImplementationOnce(() => { throw new BadRequestError('any error message') })
+      .mockImplementationOnce(() => { throw new GenericBusinessError('any error message') })
     const httpResponse = await sut.handle(faker.lorem.sentence())
     expect(httpResponse).toEqual(badRequestResponse)
   })
