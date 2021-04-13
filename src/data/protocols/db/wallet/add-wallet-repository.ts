@@ -1,4 +1,4 @@
-import { AddWalletParams } from '@/domain/usecases/add-wallet'
+import { AddWalletParams } from '@/domain/usecases'
 
 export type AddWalletRepositoryParams = AddWalletParams
 
