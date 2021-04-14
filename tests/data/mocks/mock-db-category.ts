@@ -13,10 +13,10 @@ export const mockAddCategoryRepository = (): AddCategoryRepository => {
   return new AddCategoryRepositoryStub()
 }
 
-export const mockAddCategoryRepositoryParams = (): AddCategoryRepositoryParams => {
+export const mockAddCategoryRepositoryParams = (accountId?: string): AddCategoryRepositoryParams => {
   return {
     name: faker.random.words(),
-    accountId: faker.random.word(),
+    accountId: accountId || faker.random.word(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],
