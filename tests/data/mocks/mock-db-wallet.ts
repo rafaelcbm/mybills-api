@@ -11,10 +11,10 @@ export const mockAddWalletRepository = (): AddWalletRepository => {
   return new AddWalletRepositoryStub()
 }
 
-export const mockAddWalletRepositoryParams = (): AddWalletRepositoryParams => {
+export const mockAddWalletRepositoryParams = (accountId?: string): AddWalletRepositoryParams => {
   return {
     name: faker.random.words(),
-    accountId: faker.random.word()
+    accountId: accountId || faker.random.word()
   }
 }
 
@@ -66,7 +66,7 @@ export const mockUpdateWalletRepository = (): UpdateWalletRepository => {
   return new UpdateWalletRepositoryStub()
 }
 
-export const mockUpdateWalletRepositoryParams = (accountId: string): UpdateWalletRepositoryParams => {
+export const mockUpdateWalletRepositoryParams = (accountId?: string): UpdateWalletRepositoryParams => {
   return {
     id: faker.random.word(),
     name: faker.random.words(),

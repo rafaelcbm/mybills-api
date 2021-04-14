@@ -3,7 +3,7 @@ import { mockAddWalletRepositoryParams, mockUpdateWalletRepositoryParams } from 
 import { mockAddAccountParams } from '@/tests/domain/mocks'
 import FakeObjectId from 'bson-objectid'
 import { Collection } from 'mongodb'
-import faker, { fake } from 'faker'
+import faker from 'faker'
 
 let walletCollection: Collection
 let accountCollection: Collection
@@ -45,8 +45,8 @@ describe('WalletMongoRepository', () => {
   describe('loadAll()', () => {
     test('Should load all wallets on success', async () => {
       const accountId = await mockAccountId()
-      const wallet1 = mockUpdateWalletRepositoryParams(accountId)
-      const wallet2 = mockUpdateWalletRepositoryParams(accountId)
+      const wallet1 = mockAddWalletRepositoryParams(accountId)
+      const wallet2 = mockAddWalletRepositoryParams(accountId)
       const walletsParams = [wallet1, wallet2]
       await walletCollection.insertMany(walletsParams)
 
@@ -74,8 +74,8 @@ describe('WalletMongoRepository', () => {
   describe('remove()', () => {
     test('Should remove a wallet on success', async () => {
       const accountId = await mockAccountId()
-      const wallet1 = mockUpdateWalletRepositoryParams(accountId)
-      const wallet2 = mockUpdateWalletRepositoryParams(accountId)
+      const wallet1 = mockAddWalletRepositoryParams(accountId)
+      const wallet2 = mockAddWalletRepositoryParams(accountId)
       const walletsParams = [wallet1, wallet2]
 
       const insertedWalletsResult = await walletCollection.insertMany(walletsParams)
