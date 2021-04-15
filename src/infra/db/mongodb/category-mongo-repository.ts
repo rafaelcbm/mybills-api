@@ -11,7 +11,8 @@ export class CategoryMongoRepository implements AddCategoryRepository, LoadCateg
 
   async loadAll (accountId: string): Promise<LoadCategoriesRepositoryResult[]> {
     const categoryCollection = await MongoHelper.getCollection('categories')
-    const categories = await categoryCollection.find({ accountId }).toArray()
+    const categories = await categoryCollection
+      .find({ accountId },{ projection: { accountId: 0 } }).toArray()
     return MongoHelper.mapCollection(categories)
   }
 }

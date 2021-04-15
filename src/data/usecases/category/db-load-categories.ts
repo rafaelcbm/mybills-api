@@ -7,10 +7,6 @@ export class DbLoadCategories implements LoadCategories {
   ) { }
 
   async loadAll (accountId: string): Promise<LoadCategoriesResult[]> {
-    const categoriesDbResult = await this.loadCategoriesRepository.loadAll(accountId)
-    return categoriesDbResult.map(categoryModel => {
-      const { accountId, ...category } = categoryModel
-      return category
-    })
+    return this.loadCategoriesRepository.loadAll(accountId)
   }
 }
