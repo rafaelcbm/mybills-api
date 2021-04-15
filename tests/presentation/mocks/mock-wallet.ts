@@ -15,7 +15,7 @@ export const mockAddWallet = (): AddWallet => {
 export const mockLoadWallets = (): LoadWallets => {
   class LoadWalletsStub implements LoadWallets {
     async loadAll (accountId: string): Promise<LoadWalletsResult[]> {
-      return Promise.resolve(mockLoadWalletsResult())
+      return mockLoadWalletsResult()
     }
   }
   return new LoadWalletsStub()
