@@ -1,8 +1,7 @@
-import { AddCategory, AddCategoryParams } from '@/domain/usecases'
 import { AddCategoryRepository, LoadCategoriesRepository } from '@/data/protocols'
-import { CategoryModel } from '@/domain/models'
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS } from '@/domain/errors/messages/error-messages'
+import { AddCategory, AddCategoryParams, AddCategoryResult } from '@/domain/usecases'
 
 export class DbAddCategory implements AddCategory {
   constructor (
@@ -10,7 +9,7 @@ export class DbAddCategory implements AddCategory {
     private readonly loadCategoriesRepository: LoadCategoriesRepository
   ) {}
 
-  async add (categoryParam: AddCategoryParams): Promise<CategoryModel> {
+  async add (categoryParam: AddCategoryParams): Promise<AddCategoryResult> {
     const categories = await this.loadCategoriesRepository.loadAll(categoryParam.accountId)
     if (categories?.length > 0) {
       const categoryNameExists = categories.find(c => c.name === categoryParam.name)
