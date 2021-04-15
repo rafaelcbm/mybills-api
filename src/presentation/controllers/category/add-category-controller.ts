@@ -1,4 +1,4 @@
-import { AddCategory, AddCategoryParams, AddCategoryResult } from '@/domain/usecases'
+import { AddCategory, AddCategoryParams } from '@/domain/usecases'
 import { badRequest, ok } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
@@ -21,4 +21,3 @@ export class AddCategoryController implements Controller {
 }
 
 export type AddCategoryControllerRequest = AddCategoryParams
-export type AddCategoryControllerResult = AddCategoryResult
