@@ -37,7 +37,6 @@ export const mockLoadCategoryRepositoryResult = (): LoadCategoriesRepositoryResu
   return [{
     id: faker.random.word(),
     name: faker.random.words(),
-    accountId: faker.random.word(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],
@@ -46,7 +45,6 @@ export const mockLoadCategoryRepositoryResult = (): LoadCategoriesRepositoryResu
   {
     id: faker.random.word(),
     name: faker.random.words(),
-    accountId: faker.random.word(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],

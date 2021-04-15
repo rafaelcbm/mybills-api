@@ -52,11 +52,11 @@ describe('CategoryMongoRepository', () => {
       const categories = await sut.loadAll(accountId)
 
       expect(categories.length).toBe(2)
-      expect(categories[0].accountId).toBeFalsy()
+      expect(categories[0]).not.toHaveProperty('accountId')
       expect(categories[0].name).toBeTruthy()
       expect(categories[0].root).toBeTruthy()
       expect(categories[0].ancestors.length).toBe(2)
-      expect(categories[1].accountId).toBeFalsy()
+      expect(categories[1]).not.toHaveProperty('accountId')
       expect(categories[1].name).toBeTruthy()
       expect(categories[1].root).toBeTruthy()
       expect(categories[1].ancestors.length).toBe(2)
