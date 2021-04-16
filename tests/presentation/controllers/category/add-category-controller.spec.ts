@@ -1,3 +1,5 @@
+import { GenericBusinessError } from '@/domain/errors'
+import { CATEGORY_NAME_ALREADY_EXISTS } from '@/domain/errors/messages/error-messages'
 import { AddCategory } from '@/domain/usecases'
 import { AddCategoryController, AddCategoryControllerRequest } from '@/presentation/controllers'
 import { badRequest } from '@/presentation/helpers'
@@ -54,7 +56,14 @@ describe('AddCategory Controller', () => {
     expect(spyAddCategory).toHaveBeenCalledWith(request)
   })
 
-  test('Should return 500 if AddCategory throws', async () => {
+  test('Should throw if AddCategory throws an business error', async () => {
+    const { sut, addCategoryMock } = makeSut()
+    jest.spyOn(addCategoryMock, 'add').mockImplementationOnce(() => { throw new GenericBusinessError(CATEGORY_NAME_ALREADY_EXISTS) })
+    const httpResponse = sut.handle(mockRequest())
+    await expect(httpResponse).rejects.toThrow()
+  })
+
+  test('Should throw if AddCategory throws an unexpected server error', async () => {
     const { sut, addCategoryMock } = makeSut()
     jest.spyOn(addCategoryMock, 'add').mockImplementationOnce(throwError)
     const httpResponse = sut.handle(mockRequest())
