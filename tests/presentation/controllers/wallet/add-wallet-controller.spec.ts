@@ -50,7 +50,7 @@ describe('AddWallet Controller', () => {
     expect(spyAddWallet).toHaveBeenCalledWith(request)
   })
 
-  test('Should return 500 if AddWallet throws', async () => {
+  test('Should throw if AddWallet throws', async () => {
     const { sut, addWalletMock } = makeSut()
     jest.spyOn(addWalletMock, 'add').mockImplementationOnce(throwError)
     const httpResponse = sut.handle(mockRequest())
