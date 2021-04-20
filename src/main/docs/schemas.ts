@@ -5,7 +5,10 @@ import {
   signUpParamsSchema,
   addWalletParamsSchema,
   walletSchema,
-  walletsSchema
+  walletsSchema,
+  categorySchema,
+  categoriesSchema,
+  addCategoryParamsSchema
 } from './schemas/'
 
 export default {
@@ -15,5 +18,8 @@ export default {
   error: errorSchema,
   addWalletParams: addWalletParamsSchema,
   wallet: walletSchema,
-  wallets: walletsSchema
+  wallets: walletsSchema,
+  category: categorySchema,
+  categories: categoriesSchema,
+  addCategoryParams: addCategoryParamsSchema
 }

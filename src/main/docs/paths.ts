@@ -2,12 +2,14 @@ import {
   loginPath,
   signUpPath,
   walletPath,
-  walletParamPath
+  walletParamPath,
+  categoryPath
 } from './paths/'
 
 export default {
   '/login': loginPath,
   '/signup': signUpPath,
   '/wallets': walletPath,
-  '/wallets/{walletId}': walletParamPath
+  '/wallets/{walletId}': walletParamPath,
+  '/categories': categoryPath
 }

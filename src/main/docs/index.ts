@@ -33,6 +33,9 @@ export default {
   }, {
     name: 'Wallets',
     description: 'APIs related to Wallets, responsible for grouping the bills'
+  }, {
+    name: 'Categories',
+    description: 'APIs related to Categories, responsible for categorize the bills'
   }],
   paths,
   schemas,
