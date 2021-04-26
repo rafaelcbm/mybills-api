@@ -20,6 +20,7 @@ Rest API to manage personal bills, using TDD, Clean Architecture, Typescript and
 5. [Remove Wallet](./requirements/remove-wallet.md)
 6. [Load Categories](./requirements/load-categories.md)
 7. [Add Category](./requirements/add-category.md)
+8. [Remove Category](./requirements/remove-category.md)
 
 > ## Libraries and Tools
 
