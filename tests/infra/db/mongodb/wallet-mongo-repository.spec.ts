@@ -83,12 +83,12 @@ describe('WalletMongoRepository', () => {
       const dbWallet1 = insertedWalletsResult.ops[0]
 
       const sut = makeSut()
-      const removedWalllet = await sut.remove(dbWallet1._id, accountId)
+      const removedWallet = await sut.remove(dbWallet1._id, accountId)
 
-      expect(removedWalllet).toBeTruthy()
-      expect(removedWalllet.accountId).toEqual(dbWallet1.accountId)
-      expect(removedWalllet.id).toEqual(dbWallet1._id)
-      expect(removedWalllet.name).toEqual(dbWallet1.name)
+      expect(removedWallet).toBeTruthy()
+      expect(removedWallet.accountId).toEqual(dbWallet1.accountId)
+      expect(removedWallet.id).toEqual(dbWallet1._id)
+      expect(removedWallet.name).toEqual(dbWallet1.name)
     })
 
     test('Should return undefined if could not find the wallet to be deleted', async () => {
@@ -102,8 +102,8 @@ describe('WalletMongoRepository', () => {
       expect(insertedWalletsResult.ops.length).toBe(2)
 
       const sut = makeSut()
-      const removedWalllet = await sut.remove(FakeObjectId.generate(), accountId)
-      expect(removedWalllet).toBeUndefined()
+      const removedWallet = await sut.remove(FakeObjectId.generate(), accountId)
+      expect(removedWallet).toBeUndefined()
     })
   })
 
@@ -120,12 +120,12 @@ describe('WalletMongoRepository', () => {
 
       const newWalletName = faker.random.word()
       const sut = makeSut()
-      const updatedWalllet = await sut.update({ id: dbWallet1._id, accountId, name: newWalletName })
+      const updatedWallet = await sut.update({ id: dbWallet1._id, accountId, name: newWalletName })
 
-      expect(updatedWalllet).toBeTruthy()
-      expect(updatedWalllet.accountId).toEqual(dbWallet1.accountId)
-      expect(updatedWalllet.id).toEqual(dbWallet1._id)
-      expect(updatedWalllet.name).toEqual(newWalletName)
+      expect(updatedWallet).toBeTruthy()
+      expect(updatedWallet.accountId).toEqual(dbWallet1.accountId)
+      expect(updatedWallet.id).toEqual(dbWallet1._id)
+      expect(updatedWallet.name).toEqual(newWalletName)
     })
 
     test('Should return undefined if could not find the wallet to be updated', async () => {
@@ -137,9 +137,9 @@ describe('WalletMongoRepository', () => {
       expect(insertedWalletsResult.ops.length).toBe(2)
 
       const sut = makeSut()
-      const removedWalllet = await sut.update({ id: FakeObjectId.generate(), accountId, name: faker.random.word() })
+      const removedWallet = await sut.update({ id: FakeObjectId.generate(), accountId, name: faker.random.word() })
 
-      expect(removedWalllet).toBeUndefined()
+      expect(removedWallet).toBeUndefined()
     })
   })
 })
