@@ -1,4 +1,4 @@
-import { AddCategory, AddCategoryParams, AddCategoryResult, LoadCategories, LoadCategoriesResult } from '@/domain/usecases'
+import { AddCategory, AddCategoryParams, AddCategoryResult, LoadCategories, LoadCategoriesResult, RemoveCategory } from '@/domain/usecases'
 import { mockAddCategoryResult, mockLoadCategoriesResult } from '@/tests/domain/mocks'
 
 export const mockAddCategory = (): AddCategory => {
@@ -20,4 +20,11 @@ export const mockLoadCategories = (): LoadCategories => {
     }
   }
   return new LoadCategoriesStub()
+}
+
+export const mockRemoveCategory = (): RemoveCategory => {
+  class RemoveCategoryStub implements RemoveCategory {
+    async remove (accountId: string, categoryId: string): Promise<void> { }
+  }
+  return new RemoveCategoryStub()
 }
