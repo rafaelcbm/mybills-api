@@ -3,7 +3,8 @@ import {
   signUpPath,
   walletPath,
   walletParamPath,
-  categoryPath
+  categoryPath,
+  categoryParamPath
 } from './paths/'
 
 export default {
@@ -11,5 +12,6 @@ export default {
   '/signup': signUpPath,
   '/wallets': walletPath,
   '/wallets/{walletId}': walletParamPath,
-  '/categories': categoryPath
+  '/categories': categoryPath,
+  '/categories/{categoryId}': categoryParamPath
 }
