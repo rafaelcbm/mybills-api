@@ -20,7 +20,7 @@ export class DbRemoveCategory implements RemoveCategory {
       throw new GenericBusinessError(CATEGORY_NOT_FOUND)
     }
 
-    const categoryToBeRemoved = userCategories.find(c => c.id === categoryId)
+    const categoryToBeRemoved = userCategories.find(c => c.id.toString() === categoryId)
 
     const childCategories = await this.loadChildCategoriesRepository.loadChild(accountId, categoryToBeRemoved.name)
     if (childCategories.length > 0) {
