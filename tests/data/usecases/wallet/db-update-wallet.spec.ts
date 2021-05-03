@@ -46,7 +46,7 @@ describe('DbUpdateWallet Usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should throw a specific BadRequestError if can not remove wallet', async () => {
+  test('Should throw a specific BadRequestError if can not update wallet', async () => {
     const { sut, updateWalletRepositoryStub } = makeSut()
     jest.spyOn(updateWalletRepositoryStub, 'update').mockReturnValueOnce(Promise.resolve(null))
     const walletModel = mockWalletModel()
