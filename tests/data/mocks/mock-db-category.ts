@@ -1,8 +1,8 @@
-import { AddCategoryRepository, AddCategoryRepositoryParams, AddCategoryRepositoryResult, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository, RemoveCategoryRepositoryResult } from '@/data/protocols'
+import { AddCategoryRepository, AddCategoryRepositoryParams, AddCategoryRepositoryResult, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository, RemoveCategoryRepositoryResult, UpdateCategoryRepository, UpdateCategoryRepositoryParams, UpdateCategoryRepositoryResult } from '@/data/protocols'
 import { AddCategoryParams } from '@/domain/usecases'
-import faker from 'faker'
 import { LoadChildCategoriesRepository, LoadChildCategoriesRepositoryResult } from '../protocols/db/category/load-child-categories-repository'
 import { RemoveChildCategoriesRepository } from '../protocols/db/category/remove-child-categories-repository'
+import faker from 'faker'
 
 export const mockAddCategoryRepository = (): AddCategoryRepository => {
   class AddCategoryRepositoryStub implements AddCategoryRepository {
@@ -44,10 +44,10 @@ export const mockLoadCategoriesRepository = (categoryId?: string): LoadCategorie
   return new LoadCategoryRepositoryStub()
 }
 
-export const mockLoadCategoryRepositoryResult = (categoryId?: string): LoadCategoriesRepositoryResult[] => {
+export const mockLoadCategoryRepositoryResult = (categoryId?: string,categoryName?: string): LoadCategoriesRepositoryResult[] => {
   return [{
     id: categoryId || faker.random.word(),
-    name: faker.random.words(),
+    name: categoryName || faker.random.words(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],
@@ -120,5 +120,36 @@ export const mockRemoveCategoryRepositoryResult = (): RemoveCategoryRepositoryRe
       faker.random.word(), faker.random.word()
     ],
     root: faker.random.word()
+  }
+}
+
+export const mockUpdateCategoryRepository = (): UpdateCategoryRepository => {
+  class UpdateCategoryRepositoryStub implements UpdateCategoryRepository {
+    async update (updateCategoryRepositoryParams: UpdateCategoryRepositoryParams): Promise<UpdateCategoryRepositoryResult> {
+      return Promise.resolve(mockUpdateCategoryRepositoryResult())
+    }
+  }
+  return new UpdateCategoryRepositoryStub()
+}
+
+export const mockUpdateCategoryRepositoryParams = (
+  accountId?: string,
+  categoryId?: string): UpdateCategoryRepositoryParams => {
+  return {
+    id: categoryId || faker.random.word(),
+    name: faker.random.words(),
+    accountId: accountId || faker.random.word()
+  }
+}
+
+export const mockUpdateCategoryRepositoryResult = (): UpdateCategoryRepositoryResult => {
+  return {
+    id: faker.random.word(),
+    name: faker.random.words(),
+    accountId: faker.random.word(),
+    root: faker.random.word(),
+    ancestors: [
+      faker.random.word(), faker.random.word()
+    ]
   }
 }
