@@ -1,7 +1,9 @@
 import { CategoryMongoRepository, MongoHelper } from '@/infra/db'
-import { mockAddCategoryRepositoryParams } from '@/tests/data/mocks'
+import { mockAddCategoryRepositoryParams, mockUpdateCategoryRepositoryParams } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
 import { Collection } from 'mongodb'
+import faker from 'faker'
+import FakeObjectId from 'bson-objectid'
 
 let categoriesCollection: Collection
 let accountCollection: Collection
@@ -171,6 +173,42 @@ describe('CategoryMongoRepository', () => {
       const categories = await sut.loadAll(accountId)
 
       expect(categories.length).toBe(0)
+    })
+  })
+
+  describe('update()', () => {
+    test('Should return an updatedCategory on success', async () => {
+      const accountId = await mockAccountId()
+      const category1 = mockUpdateCategoryRepositoryParams(accountId)
+      const category2 = mockUpdateCategoryRepositoryParams(accountId)
+      const categoriesParams = [category1, category2]
+
+      const insertedCategoriesResult = await categoriesCollection.insertMany(categoriesParams)
+      expect(insertedCategoriesResult.ops.length).toBe(2)
+      const dbCategory1 = insertedCategoriesResult.ops[0]
+
+      const newCategoryName = faker.random.word()
+      const sut = makeSut()
+      const updatedCategory = await sut.update({ id: dbCategory1._id, accountId, name: newCategoryName })
+
+      expect(updatedCategory).toBeTruthy()
+      expect(updatedCategory.accountId).toEqual(dbCategory1.accountId)
+      expect(updatedCategory.id).toEqual(dbCategory1._id)
+      expect(updatedCategory.name).toEqual(newCategoryName)
+    })
+
+    test('Should return undefined if could not find the category to be updated', async () => {
+      const accountId = await mockAccountId()
+      const category1 = mockUpdateCategoryRepositoryParams(accountId)
+      const category2 = mockUpdateCategoryRepositoryParams(accountId)
+      const categoriesParams = [category1, category2]
+      const insertedCategoriesResult = await categoriesCollection.insertMany(categoriesParams)
+      expect(insertedCategoriesResult.ops.length).toBe(2)
+
+      const sut = makeSut()
+      const removedCategory = await sut.update({ id: FakeObjectId.generate(), accountId, name: faker.random.word() })
+
+      expect(removedCategory).toBeUndefined()
     })
   })
 })
