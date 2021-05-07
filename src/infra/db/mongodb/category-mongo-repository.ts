@@ -1,11 +1,12 @@
-import { AddCategoryRepository, AddCategoryRepositoryParams, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository } from '@/data/protocols/db'
+import { AddCategoryRepository, AddCategoryRepositoryParams, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository, UpdateCategoryRepositoryParams, UpdateCategoryRepositoryResult } from '@/data/protocols/db'
 import { LoadChildCategoriesRepository } from '@/data/protocols/db/category/load-child-categories-repository'
 import { RemoveChildCategoriesRepository } from '@/data/protocols/db/category/remove-child-categories-repository'
 import { CategoryModel } from '@/domain/models'
 import { MongoHelper } from '@/infra/db'
 import { ObjectId } from 'bson'
 
-export class CategoryMongoRepository implements AddCategoryRepository, LoadCategoriesRepository, RemoveCategoryRepository , LoadChildCategoriesRepository , RemoveChildCategoriesRepository {
+export class CategoryMongoRepository implements AddCategoryRepository, LoadCategoriesRepository, RemoveCategoryRepository,
+                        LoadChildCategoriesRepository , RemoveChildCategoriesRepository {
   async add (categoryParam: AddCategoryRepositoryParams): Promise<CategoryModel> {
     const categoryCollection = await MongoHelper.getCollection('categories')
     const category = await categoryCollection.insertOne(categoryParam)
@@ -39,5 +40,24 @@ export class CategoryMongoRepository implements AddCategoryRepository, LoadCateg
     const categoryCollection = await MongoHelper.getCollection('categories')
     const deleteResult = await categoryCollection.deleteMany({ accountId, ancestors: root })
     return deleteResult.deletedCount
+  }
+
+  async update (updateCategoryRepositoryParams: UpdateCategoryRepositoryParams): Promise<UpdateCategoryRepositoryResult> {
+    const categoryCollection = await MongoHelper.getCollection('categories')
+    const updatedCategory = await categoryCollection.findOneAndUpdate(
+      {
+        _id: new ObjectId(updateCategoryRepositoryParams.id),
+        accountId: new ObjectId(updateCategoryRepositoryParams.accountId)
+      }, {
+        $set: {
+          name: updateCategoryRepositoryParams.name
+        }
+      }, {
+        returnOriginal: false
+      })
+
+    if (updatedCategory.ok && updatedCategory.value) {
+      return MongoHelper.map(updatedCategory.value)
+    }
   }
 }
