@@ -5,6 +5,7 @@ import faker from 'faker'
 import { sign } from 'jsonwebtoken'
 import { Collection } from 'mongodb'
 import request from 'supertest'
+import FakeObjectId from 'bson-objectid'
 
 let categoryCollection: Collection
 let accountCollection: Collection
@@ -101,6 +102,39 @@ describe('Category Routes', () => {
         .get('/api/categories')
         .set('x-access-token', accessToken)
         .expect(200)
+    })
+  })
+
+  describe('DELETE /categories', () => {
+    test('Should return 403 on remove category without accessToken', async () => {
+      await request(app)
+        .delete('/api/categories/any_id')
+        .send()
+        .expect(403)
+    })
+
+    test('Should return 204 on remove category with valid accessToken', async () => {
+      const { accessToken, id } = await mockAccessToken()
+      const res = await categoryCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const categoryId = res.ops[0]._id
+
+      await request(app)
+        .delete(`/api/categories/${categoryId}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(204)
+    })
+
+    test('Should return 400 on remove category without categoryId', async () => {
+      const { accessToken } = await mockAccessToken()
+      await request(app)
+        .delete(`/api/categories/${FakeObjectId.generate()}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
     })
   })
 })
