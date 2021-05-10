@@ -86,9 +86,7 @@ describe('Wallet Routes', () => {
     test('Should return 403 on remove wallet without accessToken', async () => {
       await request(app)
         .delete('/api/wallets/any_id')
-        .send({
-          walletId: faker.random.word()
-        })
+        .send()
         .expect(403)
     })
 
