@@ -1,7 +1,12 @@
 import { CategoryModel } from '@/domain/models'
-import { UpdateCategoryParam } from '@/domain/usecases/category/update-category'
 
-export type UpdateCategoryRepositoryParams = UpdateCategoryParam
+export type UpdateCategoryRepositoryParams = {
+  id: string
+  accountId: string
+  name: string
+  oldName: string
+}
+
 export type UpdateCategoryRepositoryResult = CategoryModel
 
 export interface UpdateCategoryRepository {

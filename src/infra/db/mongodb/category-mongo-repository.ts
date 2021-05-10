@@ -44,6 +44,34 @@ export class CategoryMongoRepository implements AddCategoryRepository, LoadCateg
 
   async update (updateCategoryRepositoryParams: UpdateCategoryRepositoryParams): Promise<UpdateCategoryRepositoryResult> {
     const categoryCollection = await MongoHelper.getCollection('categories')
+
+    // Updates the child categories ancestors reference
+    await categoryCollection.updateMany(
+      {
+        accountId: new ObjectId(updateCategoryRepositoryParams.accountId),
+        ancestors: updateCategoryRepositoryParams.oldName
+      }, {
+        $push: { ancestors: updateCategoryRepositoryParams.name }
+      })
+
+    await categoryCollection.updateMany(
+      {
+        accountId: new ObjectId(updateCategoryRepositoryParams.accountId),
+        ancestors: updateCategoryRepositoryParams.oldName
+      }, {
+        $pull: { ancestors: updateCategoryRepositoryParams.oldName }
+      })
+
+    // Updates the child categories root reference
+    await categoryCollection.updateMany(
+      {
+        accountId: new ObjectId(updateCategoryRepositoryParams.accountId),
+        root: updateCategoryRepositoryParams.oldName
+      }, {
+        $set: { root: updateCategoryRepositoryParams.name }
+      })
+
+    // Updates the category name
     const updatedCategory = await categoryCollection.findOneAndUpdate(
       {
         _id: new ObjectId(updateCategoryRepositoryParams.id),

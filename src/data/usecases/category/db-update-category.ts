@@ -1,4 +1,4 @@
-import { LoadCategoriesRepository, UpdateCategoryRepository } from '@/data/protocols'
+import { LoadCategoriesRepository, UpdateCategoryRepository, UpdateCategoryRepositoryParams } from '@/data/protocols'
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS, CATEGORY_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { CategoryModel } from '@/domain/models'
@@ -16,8 +16,8 @@ export class DbUpdateCategory implements UpdateCategory {
       throw new GenericBusinessError(CATEGORY_NOT_FOUND)
     }
 
-    const categoryById = userCategories.find(c => c.id.toString() === updateCategoryParams.id)
-    if (!categoryById) {
+    const oldCategory = userCategories.find(c => c.id.toString() === updateCategoryParams.id)
+    if (!oldCategory) {
       throw new GenericBusinessError(CATEGORY_NOT_FOUND)
     }
 
@@ -26,7 +26,8 @@ export class DbUpdateCategory implements UpdateCategory {
       throw new GenericBusinessError(CATEGORY_NAME_ALREADY_EXISTS)
     }
 
-    const updatedCategory = await this.updateCategoryRepository.update(updateCategoryParams)
+    const updateCategoryRepoParam: UpdateCategoryRepositoryParams = { ...updateCategoryParams, oldName: oldCategory.name }
+    const updatedCategory = await this.updateCategoryRepository.update(updateCategoryRepoParam)
     if (!updatedCategory) {
       throw new GenericBusinessError(CATEGORY_NOT_FOUND)
     }
