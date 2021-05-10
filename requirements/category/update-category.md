@@ -6,6 +6,7 @@
 2. ✅ Validates with a request was made by an authorized user
 3. ✅ Validates required field **categoryId** and **name**
 4. ✅ **Updates** an category with provided data
+4.1 ❌ It should update the child categories
 5. ✅ Returns **200** on success, with the updated category
 
 > ## Exceptions
