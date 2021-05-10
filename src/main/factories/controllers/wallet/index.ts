@@ -1,0 +1,6 @@
+export * from './add-wallet-controller-factory'
+export * from './add-wallet-validation-factory'
+export * from './load-wallets-controller-factory'
+export * from './remove-wallet-validation-factory'
+export * from './update-wallet-controller-factory'
+export * from './update-wallet-validation-factory'
