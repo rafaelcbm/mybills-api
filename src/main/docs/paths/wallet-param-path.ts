@@ -43,7 +43,7 @@ export const walletParamPath = {
     parameters: [{
       in: 'path',
       name: 'walletId',
-      description: 'Wallet ID to be update',
+      description: 'Wallet ID to be updated',
       required: true,
       schema: {
         type: 'string'
