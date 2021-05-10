@@ -137,4 +137,53 @@ describe('Category Routes', () => {
         .expect(400)
     })
   })
+
+  describe('PUT /categories', () => {
+    test('Should return 403 on update category without accessToken', async () => {
+      await request(app)
+        .put('/api/categories/any_id')
+        .send()
+        .expect(403)
+    })
+
+    test('Should return 200 on update category with valid params', async () => {
+      const { accessToken, id } = await mockAccessToken()
+      const res = await categoryCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const categoryId = res.ops[0]._id
+
+      await request(app)
+        .put(`/api/categories/${categoryId}`)
+        .set('x-access-token', accessToken)
+        .send({ name: faker.random.word() })
+        .expect(200)
+    })
+
+    test('Should return 400 on update category without categoryId', async () => {
+      const { accessToken } = await mockAccessToken()
+
+      await request(app)
+        .put(`/api/categories/${FakeObjectId.generate()}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
+    })
+
+    test('Should return 400 on update category without name', async () => {
+      const { accessToken, id } = await mockAccessToken()
+      const res = await categoryCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const categoryId = res.ops[0]._id
+
+      await request(app)
+        .put(`/api/categories/${categoryId}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
+    })
+  })
 })
