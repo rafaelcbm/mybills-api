@@ -1,4 +1,4 @@
-import { AddCategoryRepository, AddCategoryRepositoryParams, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository, UpdateCategoryRepositoryParams, UpdateCategoryRepositoryResult } from '@/data/protocols/db'
+import { AddCategoryRepository, AddCategoryRepositoryParams, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository, UpdateCategoryRepository, UpdateCategoryRepositoryParams, UpdateCategoryRepositoryResult } from '@/data/protocols/db'
 import { LoadChildCategoriesRepository } from '@/data/protocols/db/category/load-child-categories-repository'
 import { RemoveChildCategoriesRepository } from '@/data/protocols/db/category/remove-child-categories-repository'
 import { CategoryModel } from '@/domain/models'
@@ -6,7 +6,7 @@ import { MongoHelper } from '@/infra/db'
 import { ObjectId } from 'bson'
 
 export class CategoryMongoRepository implements AddCategoryRepository, LoadCategoriesRepository, RemoveCategoryRepository,
-                        LoadChildCategoriesRepository , RemoveChildCategoriesRepository {
+                        LoadChildCategoriesRepository , RemoveChildCategoriesRepository, UpdateCategoryRepository {
   async add (categoryParam: AddCategoryRepositoryParams): Promise<CategoryModel> {
     const categoryCollection = await MongoHelper.getCollection('categories')
     const category = await categoryCollection.insertOne(categoryParam)
