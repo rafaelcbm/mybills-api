@@ -1,5 +1,6 @@
-import { AddCategory, AddCategoryParams, AddCategoryResult, LoadCategories, LoadCategoriesResult, RemoveCategory } from '@/domain/usecases'
-import { mockAddCategoryResult, mockLoadCategoriesResult } from '@/tests/domain/mocks'
+import { CategoryModel } from '@/domain/models'
+import { AddCategory, AddCategoryParams, AddCategoryResult, LoadCategories, LoadCategoriesResult, RemoveCategory, UpdateCategory } from '@/domain/usecases'
+import { mockAddCategoryResult, mockCategoryModel, mockLoadCategoriesResult } from '@/tests/domain/mocks'
 
 export const mockAddCategory = (): AddCategory => {
   class AddCategoryStub implements AddCategory {
@@ -27,4 +28,13 @@ export const mockRemoveCategory = (): RemoveCategory => {
     async remove (accountId: string, categoryId: string): Promise<void> { }
   }
   return new RemoveCategoryStub()
+}
+
+export const mockUpdateCategory = (): UpdateCategory => {
+  class UpdateCategoryStub implements UpdateCategory {
+    async update (updateCategoryParams: CategoryModel): Promise<CategoryModel> {
+      return mockCategoryModel()
+    }
+  }
+  return new UpdateCategoryStub()
 }

@@ -1,5 +1,6 @@
 import { AddCategoryParams, AddCategoryResult, LoadCategoriesResult } from '@/domain/usecases'
 import faker from 'faker'
+import { CategoryModel } from '../models'
 
 export const mockAddCategoryParams = (): AddCategoryParams => {
   return {
@@ -27,6 +28,18 @@ export const mockLoadCategoriesResult = (): LoadCategoriesResult => {
   return {
     id: faker.random.word(),
     name: faker.random.words(),
+    ancestors: [
+      faker.random.word(), faker.random.word()
+    ],
+    root: faker.random.word()
+  }
+}
+
+export const mockCategoryModel = (): CategoryModel => {
+  return {
+    id: faker.random.word(),
+    name: faker.random.words(),
+    accountId: faker.random.word(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],
