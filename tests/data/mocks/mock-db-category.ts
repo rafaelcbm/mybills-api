@@ -35,10 +35,10 @@ export const mockAddCategoryRepositoryResult = (accountId?: string): AddCategory
   }
 }
 
-export const mockLoadCategoriesRepository = (categoryId?: string): LoadCategoriesRepository => {
+export const mockLoadCategoriesRepository = (categoryId?: string, categoryName?: string): LoadCategoriesRepository => {
   class LoadCategoryRepositoryStub implements LoadCategoriesRepository {
     async loadAll (accountId: string): Promise<LoadCategoriesRepositoryResult[]> {
-      return mockLoadCategoryRepositoryResult(categoryId)
+      return mockLoadCategoryRepositoryResult(categoryId, categoryName)
     }
   }
   return new LoadCategoryRepositoryStub()
@@ -133,12 +133,12 @@ export const mockUpdateCategoryRepository = (): UpdateCategoryRepository => {
 }
 
 export const mockUpdateCategoryRepositoryParams = (
-  accountId?: string,
-  categoryId?: string): UpdateCategoryRepositoryParams => {
+  accountId?: string, categoryId?: string,name?: string,oldName?: string): UpdateCategoryRepositoryParams => {
   return {
     id: categoryId || faker.random.word(),
-    name: faker.random.words(),
-    accountId: accountId || faker.random.word()
+    name: name || faker.random.word(),
+    accountId: accountId || faker.random.word(),
+    oldName: oldName || faker.random.word()
   }
 }
 

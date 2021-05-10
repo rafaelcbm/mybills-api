@@ -14,10 +14,12 @@ type SutTypes = {
 
 const accountId = faker.random.word()
 const categoryId = faker.random.word()
+const name = faker.random.word()
+const oldName = faker.random.word()
 
 const makeSut = (): SutTypes => {
   const updateCategoryRepositoryStub = mockUpdateCategoryRepository()
-  const loadCategoriesRepositoryStub = mockLoadCategoriesRepository(categoryId)
+  const loadCategoriesRepositoryStub = mockLoadCategoriesRepository(categoryId, oldName)
   const sut = new DbUpdateCategory(
     updateCategoryRepositoryStub,
     loadCategoriesRepositoryStub)
@@ -32,7 +34,7 @@ describe('DbUpdateCategory Usecase', () => {
   test('should call UpdateCategoryRepository with correct values ', async () => {
     const { sut, updateCategoryRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateCategoryRepositoryStub, 'update')
-    const updateCategoryParam = mockUpdateCategoryRepositoryParams(accountId, categoryId)
+    const updateCategoryParam = mockUpdateCategoryRepositoryParams(accountId, categoryId, name, oldName)
     await sut.update(updateCategoryParam)
     expect(updateSpy).toHaveBeenCalledWith(updateCategoryParam)
   })
