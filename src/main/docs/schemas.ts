@@ -8,7 +8,8 @@ import {
   walletsSchema,
   categorySchema,
   categoriesSchema,
-  addCategoryParamsSchema
+  addCategoryParamsSchema,
+  updateCategoryParamsSchema
 } from './schemas/'
 
 export default {
@@ -21,5 +22,6 @@ export default {
   wallets: walletsSchema,
   category: categorySchema,
   categories: categoriesSchema,
-  addCategoryParams: addCategoryParamsSchema
+  addCategoryParams: addCategoryParamsSchema,
+  updateCategoryParams: updateCategoryParamsSchema
 }
