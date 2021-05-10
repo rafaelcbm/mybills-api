@@ -7,6 +7,7 @@
 3. ✅ Validates required field **categoryId** and **name**
 4. ✅ **Updates** an category with provided data
 4.1 ❌ It should update the child categories
+4.2 ❌ It should update the affected bills with the new category name
 5. ✅ Returns **200** on success, with the updated category
 
 > ## Exceptions
