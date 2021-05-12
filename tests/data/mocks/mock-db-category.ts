@@ -1,4 +1,4 @@
-import { AddCategoryRepository, AddCategoryRepositoryParams, AddCategoryRepositoryResult, LoadCategoriesRepository, LoadCategoriesRepositoryResult, RemoveCategoryRepository, RemoveCategoryRepositoryResult, UpdateCategoryRepository, UpdateCategoryRepositoryParams, UpdateCategoryRepositoryResult } from '@/data/protocols'
+import { AddCategoryRepository, AddCategoryRepositoryParams, AddCategoryRepositoryResult, LoadCategoriesRepository, LoadCategoriesRepositoryResult, LoadRootCategoriesRepository, RemoveCategoryRepository, RemoveCategoryRepositoryResult, UpdateCategoryRepository, UpdateCategoryRepositoryParams, UpdateCategoryRepositoryResult, LoadRootCategoriesRepositoryResult } from '@/data/protocols'
 import { AddCategoryParams } from '@/domain/usecases'
 import { LoadChildCategoriesRepository, LoadChildCategoriesRepositoryResult } from '../protocols/db/category/load-child-categories-repository'
 import { RemoveChildCategoriesRepository } from '../protocols/db/category/remove-child-categories-repository'
@@ -81,29 +81,50 @@ export const mockRemoveChildCategoriesRepository = (): RemoveChildCategoriesRepo
   return new RemoveChildCategoriesRepositoryStub()
 }
 
-export const mockLoadChildCategoriesRepository = (): LoadChildCategoriesRepository => {
+export const mockLoadChildCategoriesRepository = (accountId?: string, root?: string): LoadChildCategoriesRepository => {
   class LoadChildCategoriesRepositoryStub implements LoadChildCategoriesRepository {
-    async loadChild (root: string, accountId: string): Promise<LoadChildCategoriesRepositoryResult[]> {
-      return mockLoadChildCategoriesRepositoryResult()
+    async loadChild (accountId: string,root: string): Promise<LoadChildCategoriesRepositoryResult[]> {
+      return mockLoadChildCategoriesRepositoryResult(accountId, root)
     }
   }
   return new LoadChildCategoriesRepositoryStub()
 }
 
-export const mockLoadChildCategoriesRepositoryResult = (): LoadChildCategoriesRepositoryResult[] => {
+export const mockLoadChildCategoriesRepositoryResult = (accountId?: string, root?: string): LoadChildCategoriesRepositoryResult[] => {
   return [{
     id: faker.random.word(),
-    accountId: faker.random.word(),
+    accountId: accountId || faker.random.word(),
     name: faker.random.words(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],
-    root: faker.random.word()
+    root: root || faker.random.word()
   },
   {
     id: faker.random.word(),
-    accountId: faker.random.word(),
+    accountId: accountId || faker.random.word(),
     name: faker.random.words(),
+    ancestors: [
+      faker.random.word(), faker.random.word()
+    ],
+    root: root || faker.random.word()
+  }]
+}
+
+export const mockLoadRootCategoriesRepository = (accountId?: string, name?: string): LoadRootCategoriesRepository => {
+  class LoadRootCategoriesRepositoryStub implements LoadRootCategoriesRepository {
+    async loadRoots (accountId: string): Promise<LoadRootCategoriesRepositoryResult[]> {
+      return mockLoadRootCategoriesRepositoryResult(accountId, name)
+    }
+  }
+  return new LoadRootCategoriesRepositoryStub()
+}
+
+export const mockLoadRootCategoriesRepositoryResult = (accountId?: string, name?: string): LoadRootCategoriesRepositoryResult[] => {
+  return [{
+    id: faker.random.word(),
+    accountId: accountId || faker.random.word(),
+    name: name || faker.random.words(),
     ancestors: [
       faker.random.word(), faker.random.word()
     ],

@@ -28,16 +28,6 @@ describe('DbLoadCategories Usecase', () => {
     expect(loadAllSpy).toHaveBeenCalledWith(accountId)
   })
 
-  test('should return correct values without accountId ', async () => {
-    const { sut } = makeSut()
-    const accountId = faker.random.word()
-    const categories = await sut.loadAll(accountId)
-
-    expect(categories.length).toBe(2)
-    expect(categories[0]).not.toHaveProperty('accountId')
-    expect(categories[1]).not.toHaveProperty('accountId')
-  })
-
   test('Should throw if LoadCategoryRepository throws', async () => {
     const { sut, loadCategoryRepositoryStub } = makeSut()
     jest.spyOn(loadCategoryRepositoryStub, 'loadAll').mockImplementationOnce(throwError)
