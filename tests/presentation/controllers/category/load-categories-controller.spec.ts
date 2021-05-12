@@ -26,9 +26,9 @@ describe('LoadCategories Controller', () => {
   test('Should call LoadCategories with correct values', async () => {
     const { sut, loadCategoriesMock } = makeSut()
     const request = mockRequest()
-    const spyAddWallet = jest.spyOn(loadCategoriesMock, 'loadAll')
+    const spyLoadCategories = jest.spyOn(loadCategoriesMock, 'loadAll')
     await sut.handle(request)
-    expect(spyAddWallet).toHaveBeenCalledWith(request.accountId)
+    expect(spyLoadCategories).toHaveBeenCalledWith(request.accountId)
   })
 
   test('Should return 500 if LoadCategories throws', async () => {
