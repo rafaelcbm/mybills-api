@@ -1,6 +1,6 @@
 import { CategoryModel } from '@/domain/models'
-import { AddCategory, AddCategoryParams, AddCategoryResult, LoadCategories, LoadCategoriesResult, RemoveCategory, UpdateCategory } from '@/domain/usecases'
-import { mockAddCategoryResult, mockCategoryModel, mockLoadCategoriesResult } from '@/tests/domain/mocks'
+import { AddCategory, AddCategoryParams, AddCategoryResult, LoadCategories, LoadCategoriesResult, LoadCategoriesTree, LoadCategoriesTreeResult, RemoveCategory, UpdateCategory } from '@/domain/usecases'
+import { mockAddCategoryResult, mockCategoryModel, mockLoadCategoriesResult, mockLoadCategoriesTreeResult } from '@/tests/domain/mocks'
 
 export const mockAddCategory = (): AddCategory => {
   class AddCategoryStub implements AddCategory {
@@ -37,4 +37,13 @@ export const mockUpdateCategory = (): UpdateCategory => {
     }
   }
   return new UpdateCategoryStub()
+}
+
+export const mockLoadCategoriesTree = (): LoadCategoriesTree => {
+  class LoadCategoriesTreeStub implements LoadCategoriesTree {
+    async load (accountId: string): Promise<LoadCategoriesTreeResult[]> {
+      return mockLoadCategoriesTreeResult()
+    }
+  }
+  return new LoadCategoriesTreeStub()
 }

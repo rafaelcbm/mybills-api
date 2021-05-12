@@ -1,4 +1,4 @@
-import { AddCategoryParams, AddCategoryResult, LoadCategoriesResult } from '@/domain/usecases'
+import { AddCategoryParams, AddCategoryResult, LoadCategoriesResult, LoadCategoriesTreeResult } from '@/domain/usecases'
 import faker from 'faker'
 import { CategoryModel } from '../models'
 
@@ -45,4 +45,30 @@ export const mockCategoryModel = (): CategoryModel => {
     ],
     root: faker.random.word()
   }
+}
+
+export const mockLoadCategoriesTreeResult = (): LoadCategoriesTreeResult[] => {
+  const rootName = faker.random.word()
+  return [{
+    id: faker.random.word(),
+    name: rootName,
+    ancestors: [],
+    root: null,
+    children: [{
+      id: faker.random.word(),
+      name: faker.random.words(),
+      ancestors: [
+        rootName
+      ],
+      root: rootName
+    }, {
+      id: faker.random.word(),
+      name: faker.random.words(),
+      ancestors: [
+        rootName
+      ],
+      root: rootName
+    }
+    ]
+  }]
 }
