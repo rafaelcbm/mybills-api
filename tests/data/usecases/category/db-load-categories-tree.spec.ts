@@ -1,6 +1,6 @@
 import { LoadChildCategoriesRepository, LoadRootCategoriesRepository } from '@/data/protocols'
 import { DbLoadCategoriesTree } from '@/data/usecases'
-import { mockLoadChildCategoriesRepository, mockLoadRootCategoriesRepository } from '@/tests/data/mocks'
+import { mockLoadChildCategoriesRepository, mockLoadChildCategoriesRepositoryResult, mockLoadRootCategoriesRepository, mockLoadRootCategoriesRepositoryResult } from '@/tests/data/mocks'
 import { throwError } from '@/tests/domain/mocks'
 import faker from 'faker'
 
@@ -61,6 +61,24 @@ describe('LoadCategoriesTree Usecase', () => {
     expect(loadChilds).toHaveBeenCalledWith(accountId, root)
   })
 
+  test('should return categories with its children ', async () => {
+    const { sut, loadChildCategoriesRepository } = makeSut()
+
+    jest.spyOn(loadChildCategoriesRepository, 'loadChild')
+      .mockReturnValueOnce(Promise.resolve(mockLoadChildCategoriesRepositoryResult(accountId, root)))
+      .mockReturnValue(Promise.resolve([]))
+    const categoriesTree = await sut.load(accountId)
+
+    expect(categoriesTree.length).toBe(1)
+    expect(categoriesTree[0].name).toBe(root)
+    expect(categoriesTree[0].root).toBeNull()
+    expect(categoriesTree[0].id).toBeTruthy()
+    expect(categoriesTree[0].ancestors).toEqual([])
+    expect(categoriesTree[0].children.length).toBe(2)
+    expect(categoriesTree[0].children[0].root).toBe(root)
+    expect(categoriesTree[0].children[1].root).toBe(root)
+  })
+
   test('Should throw if LoadRootCategoriesRepository throws', async () => {
     const { sut, loadRootCategoriesRepository } = makeSut()
     jest.spyOn(loadRootCategoriesRepository, 'loadRoots').mockImplementationOnce(throwError)
@@ -74,11 +92,4 @@ describe('LoadCategoriesTree Usecase', () => {
     const promise = sut.load(faker.random.word())
     await expect(promise).rejects.toThrow()
   })
-
-  // test('Should throw if LoadCategoryRepository throws', async () => {
-  //   const { sut, loadRootCategoriesRepository: loadCategoryRepositoryStub } = makeSut()
-  //   jest.spyOn(loadCategoryRepositoryStub, 'loadAll').mockImplementationOnce(throwError)
-  //   const promise = sut.loadAll(faker.random.word())
-  //   await expect(promise).rejects.toThrow()
-  // })
 })

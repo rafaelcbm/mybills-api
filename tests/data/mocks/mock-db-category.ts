@@ -125,10 +125,8 @@ export const mockLoadRootCategoriesRepositoryResult = (accountId?: string, name?
     id: faker.random.word(),
     accountId: accountId || faker.random.word(),
     name: name || faker.random.words(),
-    ancestors: [
-      faker.random.word(), faker.random.word()
-    ],
-    root: faker.random.word()
+    ancestors: [],
+    root: null
   }]
 }
 
