@@ -9,7 +9,8 @@ import {
   categorySchema,
   categoriesSchema,
   addCategoryParamsSchema,
-  updateCategoryParamsSchema
+  updateCategoryParamsSchema,
+  categoryTreeSchema
 } from './schemas/'
 
 export default {
@@ -23,5 +24,6 @@ export default {
   category: categorySchema,
   categories: categoriesSchema,
   addCategoryParams: addCategoryParamsSchema,
-  updateCategoryParams: updateCategoryParamsSchema
+  updateCategoryParams: updateCategoryParamsSchema,
+  categoriesTree: categoryTreeSchema
 }
