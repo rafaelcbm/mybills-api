@@ -1,7 +1,7 @@
-import { LoadCategoriesTree } from '@/domain/usecases/category/load-categories'
+import { LoadCategoriesTree } from '@/domain/usecases'
 import { LoadCategoriesTreeController, LoadCategoriesTreeControllerRequest } from '@/presentation/controllers'
 import { throwError } from '@/tests/domain/mocks'
-import { mockLoadCategories, mockLoadCategoriesTree } from '@/tests/presentation/mocks'
+import { mockLoadCategoriesTree } from '@/tests/presentation/mocks'
 import faker from 'faker'
 
 const mockRequest = (): LoadCategoriesTreeControllerRequest => ({

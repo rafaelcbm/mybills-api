@@ -7,12 +7,12 @@ export class LoadCategoriesTreeController implements Controller {
     private readonly loadCategoriesTree: LoadCategoriesTree
   ) {}
 
-  async handle (request: LoadCategoriesControllerRequest): Promise<HttpResponse> {
+  async handle (request: LoadCategoriesTreeControllerRequest): Promise<HttpResponse> {
     const categoriesTree = await this.loadCategoriesTree.load(request.accountId)
     return ok(categoriesTree)
   }
 }
 
-export type LoadCategoriesControllerRequest = {
+export type LoadCategoriesTreeControllerRequest = {
   accountId: string
 }
