@@ -186,4 +186,20 @@ describe('Category Routes', () => {
         .expect(400)
     })
   })
+
+  describe('GET /categories/tree', () => {
+    test('Should return 403 on load categories tree without accessToken', async () => {
+      await request(app)
+        .get('/api/categories/tree')
+        .expect(403)
+    })
+
+    test('Should return 200 on load categories with valid accessToken', async () => {
+      const { accessToken } = await mockAccessToken()
+      await request(app)
+        .get('/api/categories/tree')
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
+  })
 })
