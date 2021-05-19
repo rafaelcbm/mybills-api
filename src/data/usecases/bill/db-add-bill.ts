@@ -31,7 +31,7 @@ export class DbAddBill implements AddBill {
     }
   }
 
-  private async checkWallet (bill: AddBillParams): Promise<void> {
+  public async checkWallet (bill: AddBillParams): Promise<void> {
     const wallets = await this.loadWalletRepository.loadAll(bill.accountId)
     if (!wallets || wallets.length === 0) {
       throw new GenericBusinessError(WALLET_NOT_FOUND)
@@ -43,7 +43,7 @@ export class DbAddBill implements AddBill {
     }
   }
 
-  private async checkCategory (bill: AddBillParams): Promise<void> {
+  public async checkCategory (bill: AddBillParams): Promise<void> {
     const categories = await this.loadCategoriesRepository.loadAll(bill.accountId)
     if (!categories || categories?.length === 0) {
       throw new GenericBusinessError(CATEGORY_NAME_ALREADY_EXISTS)
@@ -55,7 +55,7 @@ export class DbAddBill implements AddBill {
     }
   }
 
-  private generatePeriodicBills (baseBill: AddBillRepositoryResult, accountId: string): AddBillParams[] {
+  public generatePeriodicBills (baseBill: AddBillRepositoryResult, accountId: string): AddBillParams[] {
     const periodicBills: AddBillParams[] = []
 
     for (let actualPart = baseBill.periodicity.part + 1; actualPart <= baseBill.periodicity.length; actualPart++) {
