@@ -10,9 +10,9 @@ export const mockAddWalletParams = (): AddWalletParams => {
   }
 }
 
-export const mockWalletModel = (): WalletModel => {
+export const mockWalletModel = (id?: string): WalletModel => {
   return {
-    id: faker.random.word(),
+    id: id || faker.random.word(),
     name: faker.random.words(),
     accountId: faker.random.word()
   }
