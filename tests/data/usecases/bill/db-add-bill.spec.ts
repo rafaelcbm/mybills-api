@@ -2,7 +2,6 @@ import { AddBillRepository, AddManyBillsRepository, LoadCategoriesRepository, Lo
 import { DbAddBill } from '@/data/usecases'
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS, WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
-import { AddBillParams } from '@/domain/usecases'
 import { mockAddBillRepository, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
 import { mockAddBillParams, mockCategoryModel, mockWalletModel } from '@/tests/domain/mocks'
 import faker from 'faker'
@@ -115,6 +114,46 @@ describe('DbAddBill ', () => {
       const promise = sut.checkWallet(addBillParam)
 
       await expect(promise).rejects.toThrowError(new GenericBusinessError(WALLET_NOT_FOUND))
+      expect(loadWalletSpy).toHaveBeenCalledWith(addBillParam.accountId)
+    })
+  })
+
+  describe('DbAddBill checkCategory', () => {
+    test('should check correct values ', async () => {
+      const { sut , loadCategoriesRepositoryStub } = makeSut()
+      const addBillParam = mockAddBillParams()
+
+      const loadCategorySpy = jest.spyOn(loadCategoriesRepositoryStub, 'loadAll')
+        .mockReturnValueOnce(Promise.resolve([mockCategoryModel(addBillParam.categoryId)]))
+
+      await sut.checkCategory(addBillParam)
+
+      expect(loadCategorySpy).toHaveBeenCalledWith(addBillParam.accountId)
+    })
+
+    test('should throw a GenericBusinessError if no category is found', async () => {
+      const { sut , loadCategoriesRepositoryStub } = makeSut()
+      const addBillParam = mockAddBillParams()
+
+      const loadWalletSpy = jest.spyOn(loadCategoriesRepositoryStub, 'loadAll')
+        .mockReturnValueOnce(Promise.resolve([]))
+
+      const promise = sut.checkCategory(addBillParam)
+
+      await expect(promise).rejects.toThrowError(new GenericBusinessError(CATEGORY_NAME_ALREADY_EXISTS))
+      expect(loadWalletSpy).toHaveBeenCalledWith(addBillParam.accountId)
+    })
+
+    test('should throw a GenericBusinessError if no category is found with the same id', async () => {
+      const { sut , loadCategoriesRepositoryStub } = makeSut()
+      const addBillParam = mockAddBillParams()
+
+      const loadWalletSpy = jest.spyOn(loadCategoriesRepositoryStub, 'loadAll')
+        .mockReturnValueOnce(Promise.resolve([mockCategoryModel()]))
+
+      const promise = sut.checkCategory(addBillParam)
+
+      await expect(promise).rejects.toThrowError(new GenericBusinessError(CATEGORY_NAME_ALREADY_EXISTS))
       expect(loadWalletSpy).toHaveBeenCalledWith(addBillParam.accountId)
     })
   })

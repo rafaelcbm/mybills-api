@@ -35,9 +35,9 @@ export const mockLoadCategoriesResult = (): LoadCategoriesResult => {
   }
 }
 
-export const mockCategoryModel = (): CategoryModel => {
+export const mockCategoryModel = (id?: string): CategoryModel => {
   return {
-    id: faker.random.word(),
+    id: id || faker.random.word(),
     name: faker.random.words(),
     accountId: faker.random.word(),
     ancestors: [
