@@ -17,7 +17,7 @@ export const mockAddBillParams = (): AddBillParams => {
       type: PeriodicityEnum.MONTH,
       interval: faker.random.number(),
       part: faker.random.number(),
-      length: faker.random.number()
+      endPart: faker.random.number()
     }
   }
 }

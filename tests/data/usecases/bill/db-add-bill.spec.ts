@@ -2,7 +2,8 @@ import { AddBillRepository, AddManyBillsRepository, LoadCategoriesRepository, Lo
 import { DbAddBill } from '@/data/usecases'
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS, WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
-import { mockAddBillRepository, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
+import { BillPeriodicityModel, PeriodicityEnum } from '@/domain/models'
+import { mockAddBillRepository, mockAddBillRepositoryResult, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
 import { mockAddBillParams, mockCategoryModel, mockWalletModel } from '@/tests/domain/mocks'
 import faker from 'faker'
 
@@ -155,6 +156,123 @@ describe('DbAddBill ', () => {
 
       await expect(promise).rejects.toThrowError(new GenericBusinessError(CATEGORY_NAME_ALREADY_EXISTS))
       expect(loadWalletSpy).toHaveBeenCalledWith(addBillParam.accountId)
+    })
+  })
+
+  describe('DbAddBill generatePeriodicBills', () => {
+    test('should generate periodic bills', async () => {
+      const { sut } = makeSut()
+      const baseBill = mockAddBillRepositoryResult()
+      const accountId = faker.random.word()
+      baseBill.periodicity.part = 1
+      baseBill.periodicity.endPart = 3
+      baseBill.periodicity.type = PeriodicityEnum.MONTH
+      baseBill.periodicity.interval = 1
+
+      jest.spyOn(sut, 'extractDate').mockReturnValueOnce(new Date())
+      const periodicBills = sut.generatePeriodicBills(baseBill, accountId)
+
+      expect(periodicBills.length).toBe(2)
+      expect(periodicBills[0].accountId).toBe(accountId)
+      expect(periodicBills[0].walletId).toBe(baseBill.walletId)
+      expect(periodicBills[0].categoryId).toBe(baseBill.categoryId)
+      expect(periodicBills[0].description).toBe(baseBill.description.concat(` 2 - ${baseBill.periodicity.endPart} `))
+      expect(periodicBills[0].date).toBeTruthy()
+      expect(periodicBills[0].value).toBe(baseBill.value)
+      expect(periodicBills[0].isDebt).toBe(baseBill.isDebt)
+      expect(periodicBills[0].note).toBe(baseBill.note)
+      expect(periodicBills[0].periodicity.idReferenceBill).toBe(baseBill.id)
+      expect(periodicBills[0].periodicity.type).toBe(baseBill.periodicity.type)
+      expect(periodicBills[0].periodicity.interval).toBe(baseBill.periodicity.interval)
+      expect(periodicBills[0].periodicity.part).toBe(2)
+      expect(periodicBills[0].periodicity.endPart).toBe(baseBill.periodicity.endPart)
+      expect(periodicBills[1].accountId).toBe(accountId)
+      expect(periodicBills[1].walletId).toBe(baseBill.walletId)
+      expect(periodicBills[1].categoryId).toBe(baseBill.categoryId)
+      expect(periodicBills[1].description).toBe(baseBill.description.concat(` 3 - ${baseBill.periodicity.endPart} `))
+      expect(periodicBills[1].date).toBeTruthy()
+      expect(periodicBills[1].value).toBe(baseBill.value)
+      expect(periodicBills[1].isDebt).toBe(baseBill.isDebt)
+      expect(periodicBills[1].note).toBe(baseBill.note)
+      expect(periodicBills[1].periodicity.idReferenceBill).toBe(baseBill.id)
+      expect(periodicBills[1].periodicity.type).toBe(baseBill.periodicity.type)
+      expect(periodicBills[1].periodicity.interval).toBe(baseBill.periodicity.interval)
+      expect(periodicBills[1].periodicity.part).toBe(3)
+      expect(periodicBills[1].periodicity.endPart).toBe(baseBill.periodicity.endPart)
+    })
+  })
+
+  describe('DbAddBill extractDate', () => {
+    test('should generate correct Date with periodicity in Days', async () => {
+      const { sut } = makeSut()
+
+      const date = new Date(2021, 10, 18)
+      const baseBillPeriodicity: BillPeriodicityModel = {
+        idReferenceBill: faker.random.word(),
+        type: PeriodicityEnum.DAY,
+        interval: 2,
+        part: 2,
+        endPart: 4
+      }
+      const part = 3
+
+      const resultDate = sut.extractDate(date, baseBillPeriodicity, part)
+
+      expect(resultDate).toEqual(new Date(2021, 10, 20))
+    })
+
+    test('should generate correct Date with periodicity in Weeks', async () => {
+      const { sut } = makeSut()
+
+      const date = new Date(2021, 2, 10)
+      const baseBillPeriodicity: BillPeriodicityModel = {
+        idReferenceBill: faker.random.word(),
+        type: PeriodicityEnum.WEEK,
+        interval: 1,
+        part: 1,
+        endPart: 4
+      }
+      const part = 3
+
+      const resultDate = sut.extractDate(date, baseBillPeriodicity, part)
+
+      expect(resultDate).toEqual(new Date(2021, 2, 24))
+    })
+
+    test('should generate correct Date with periodicity in Months', async () => {
+      const { sut } = makeSut()
+
+      const date = new Date(2021, 10, 15)
+      const baseBillPeriodicity: BillPeriodicityModel = {
+        idReferenceBill: faker.random.word(),
+        type: PeriodicityEnum.MONTH,
+        interval: 2,
+        part: 2,
+        endPart: 4
+      }
+      const part = 4
+
+      const resultDate = sut.extractDate(date, baseBillPeriodicity, part)
+
+      expect(resultDate).toEqual(new Date(2022, 2, 15))
+    })
+
+    test('should generate correct Date with periodicity in Years', async () => {
+      const { sut } = makeSut()
+
+      const date = new Date(2021, 10, 15)
+      const baseBillPeriodicity: BillPeriodicityModel = {
+        idReferenceBill: faker.random.word(),
+        type: PeriodicityEnum.YEAR,
+        interval: 5,
+        part: 3,
+        endPart: 4
+      }
+      const part = 5
+
+      const resultDate = sut.extractDate(date, baseBillPeriodicity, part)
+
+      expect(resultDate).toEqual(new Date(2031, 10, 15))
     })
   })
 })
