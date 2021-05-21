@@ -35,6 +35,7 @@ export const mockAddBillRepositoryParams = (accountId?: string): AddBillReposito
 export const mockAddBillRepositoryResult = (): AddBillRepositoryResult => {
   return {
     id: faker.random.word(),
+    accountId: faker.random.word(),
     walletId: faker.random.word(),
     categoryId: faker.random.word(),
     description: faker.random.word(),
