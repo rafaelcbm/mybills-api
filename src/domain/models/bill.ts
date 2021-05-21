@@ -16,7 +16,7 @@ export type BillPeriodicityModel = {
   type: PeriodicityEnum
   interval: number
   part: number
-  length: number
+  endPart: number
 }
 
 export enum PeriodicityEnum {

@@ -20,8 +20,8 @@ export class DbAddBill implements AddBill {
 
     await this.checkCategory(bill)
 
-    if (bill?.periodicity?.length > 1) {
-      bill.description = bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.length} `)
+    if (bill?.periodicity?.endPart > 1) {
+      bill.description = bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.endPart} `)
       const savedBaseBill = await this.addBillRepository.add(bill)
 
       const periodicBills = this.generatePeriodicBills(savedBaseBill, bill.accountId)
@@ -58,12 +58,12 @@ export class DbAddBill implements AddBill {
   public generatePeriodicBills (baseBill: AddBillRepositoryResult, accountId: string): AddBillParams[] {
     const periodicBills: AddBillParams[] = []
 
-    for (let actualPart = baseBill.periodicity.part + 1; actualPart <= baseBill.periodicity.length; actualPart++) {
+    for (let actualPart = baseBill.periodicity.part + 1; actualPart <= baseBill.periodicity.endPart; actualPart++) {
       const newBill: AddBillParams = {
         accountId: accountId,
         walletId: baseBill.walletId,
         categoryId: baseBill.categoryId,
-        description: baseBill.description.concat(` ${actualPart} - ${baseBill.periodicity.length} `),
+        description: baseBill.description.concat(` ${actualPart} - ${baseBill.periodicity.endPart} `),
         date: this.extractDate(baseBill.date, baseBill.periodicity, actualPart),
         value: baseBill.value,
         isDebt: baseBill.isDebt,
@@ -73,7 +73,7 @@ export class DbAddBill implements AddBill {
           type: baseBill.periodicity.type,
           interval: baseBill.periodicity.interval,
           part: actualPart,
-          length: baseBill.periodicity.length
+          endPart: baseBill.periodicity.endPart
         }
       }
 
@@ -83,21 +83,21 @@ export class DbAddBill implements AddBill {
     return periodicBills
   }
 
-  private extractDate (date: Date, periodicity: BillPeriodicityModel, actualPart: number): Date {
+  public extractDate (date: Date, baseBillPeriodicity: BillPeriodicityModel, actualPart: number): Date {
     let computedDate
 
-    switch (periodicity.type) {
+    switch (baseBillPeriodicity.type) {
       case PeriodicityEnum.DAY:
-        computedDate = addDays(date, periodicity.interval * (actualPart - periodicity.part))
+        computedDate = addDays(date, baseBillPeriodicity.interval * (actualPart - baseBillPeriodicity.part))
         break
       case PeriodicityEnum.WEEK:
-        computedDate = addWeeks(date, periodicity.interval * (actualPart - periodicity.part))
+        computedDate = addWeeks(date, baseBillPeriodicity.interval * (actualPart - baseBillPeriodicity.part))
         break
       case PeriodicityEnum.MONTH:
-        computedDate = addMonths(date, periodicity.interval * (actualPart - periodicity.part))
+        computedDate = addMonths(date, baseBillPeriodicity.interval * (actualPart - baseBillPeriodicity.part))
         break
       case PeriodicityEnum.YEAR:
-        computedDate = addYears(date, periodicity.interval * (actualPart - periodicity.part))
+        computedDate = addYears(date, baseBillPeriodicity.interval * (actualPart - baseBillPeriodicity.part))
         break
     }
 
