@@ -1,6 +1,7 @@
 import { AddBill, AddBillParams } from '@/domain/usecases'
 import { badRequest, noContent } from '@/presentation/helpers'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
+import parseISO from 'date-fns/parseISO'
 
 export class AddBillController implements Controller {
   constructor (
@@ -13,6 +14,7 @@ export class AddBillController implements Controller {
     if (error) {
       return badRequest(error)
     }
+    request.date = parseISO(request.date.toString())
     await this.addBill.add({
       ...request
     })

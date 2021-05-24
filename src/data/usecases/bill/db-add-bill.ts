@@ -21,7 +21,7 @@ export class DbAddBill implements AddBill {
     await this.checkCategory(bill)
 
     if (bill?.periodicity?.endPart > 1) {
-      bill.description = bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.endPart} `)
+      bill.description = bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.endPart}`)
       const savedBaseBill = await this.addBillRepository.add(bill)
 
       const periodicBills = this.generatePeriodicBills(savedBaseBill, bill.accountId)
@@ -63,7 +63,9 @@ export class DbAddBill implements AddBill {
         accountId: accountId,
         walletId: baseBill.walletId,
         categoryId: baseBill.categoryId,
-        description: baseBill.description.concat(` ${actualPart} - ${baseBill.periodicity.endPart} `),
+        description: baseBill.description
+          .slice(0,baseBill.description.length - 5)
+          .concat(` ${actualPart} - ${baseBill.periodicity.endPart}`),
         date: this.extractDate(baseBill.date, baseBill.periodicity, actualPart),
         value: baseBill.value,
         isDebt: baseBill.isDebt,
