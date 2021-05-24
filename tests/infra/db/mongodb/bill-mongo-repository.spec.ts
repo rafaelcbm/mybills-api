@@ -31,7 +31,7 @@ describe('BillMongoRepository', () => {
   })
 
   describe('add()', () => {
-    test('Should add a bills on success', async () => {
+    test('Should add a bill on success', async () => {
       const sut = makeSut()
       const billParam = mockAddBillRepositoryParams()
 
@@ -49,6 +49,18 @@ describe('BillMongoRepository', () => {
       expect(savedBill.isDebt).toEqual(billParam.isDebt)
       expect(savedBill.note).toEqual(billParam.note)
       expect(savedBill.periodicity).toEqual(billParam.periodicity)
+    })
+  })
+
+  describe('addMany()', () => {
+    test('Should add bills on success', async () => {
+      const sut = makeSut()
+      const billsParam = [mockAddBillRepositoryParams(), mockAddBillRepositoryParams()]
+
+      await sut.addMany(billsParam)
+
+      const count = await billsCollection.countDocuments()
+      expect(count).toBe(2)
     })
   })
 })

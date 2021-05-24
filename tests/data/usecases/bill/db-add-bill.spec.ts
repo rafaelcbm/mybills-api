@@ -69,7 +69,7 @@ describe('DbAddBill ', () => {
       jest.spyOn(addBillRepositoryStub, 'add').mockReturnValueOnce(Promise.resolve(null))
       const periodicBillsFake = [mockAddBillParams(), mockAddBillParams()]
       jest.spyOn(sut, 'generatePeriodicBills').mockReturnValueOnce(periodicBillsFake)
-      const addManyBillsSpy = jest.spyOn(addManyBillsRepositoryStub, 'add')
+      const addManyBillsSpy = jest.spyOn(addManyBillsRepositoryStub, 'addMany')
 
       const addBillParam = mockAddBillParams()
 

@@ -55,7 +55,7 @@ export const mockAddBillRepositoryResult = (): AddBillRepositoryResult => {
 
 export const mockAddManyBillsRepository = (): AddManyBillsRepository => {
   class AddManyBillsRepositoryStub implements AddManyBillsRepository {
-    async add (addBillParams: AddManyBillsRepositoryParams[]): Promise<void> {
+    async addMany (addBillParams: AddManyBillsRepositoryParams[]): Promise<void> {
 
     }
   }
