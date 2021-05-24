@@ -25,7 +25,7 @@ export class DbAddBill implements AddBill {
       const savedBaseBill = await this.addBillRepository.add(bill)
 
       const periodicBills = this.generatePeriodicBills(savedBaseBill, bill.accountId)
-      await this.addManyBillsRepository.add(periodicBills)
+      await this.addManyBillsRepository.addMany(periodicBills)
     } else {
       await this.addBillRepository.add(bill)
     }
