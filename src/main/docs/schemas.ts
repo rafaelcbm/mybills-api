@@ -10,7 +10,8 @@ import {
   categoriesSchema,
   addCategoryParamsSchema,
   updateCategoryParamsSchema,
-  categoryTreeSchema
+  categoryTreeSchema,
+  addBillParamsSchema
 } from './schemas/'
 
 export default {
@@ -25,5 +26,6 @@ export default {
   categories: categoriesSchema,
   addCategoryParams: addCategoryParamsSchema,
   updateCategoryParams: updateCategoryParamsSchema,
-  categoriesTree: categoryTreeSchema
+  categoriesTree: categoryTreeSchema,
+  addBillParams: addBillParamsSchema
 }

@@ -36,6 +36,9 @@ export default {
   }, {
     name: 'Categories',
     description: 'APIs related to Categories, responsible for categorize the bills'
+  }, {
+    name: 'Bills',
+    description: 'APIs related to Bills, responsible for maintain the bills'
   }],
   paths,
   schemas,

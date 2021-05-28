@@ -5,7 +5,8 @@ import {
   walletParamPath,
   categoryPath,
   categoryParamPath,
-  categoryTreePath
+  categoryTreePath,
+  billPath
 } from './paths/'
 
 export default {
@@ -15,5 +16,6 @@ export default {
   '/wallets/{walletId}': walletParamPath,
   '/categories': categoryPath,
   '/categories/{categoryId}': categoryParamPath,
-  '/categories/tree': categoryTreePath
+  '/categories/tree': categoryTreePath,
+  '/bills': billPath
 }
