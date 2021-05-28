@@ -21,10 +21,9 @@ export class DbAddBill implements AddBill {
     await this.checkCategory(bill)
 
     if (bill?.periodicity?.endPart > 1) {
-      bill.description = bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.endPart}`)
-
       const billWithNewDescription = Object.assign({},bill, { description: bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.endPart}`) })
       const savedBaseBill = await this.addBillRepository.add(billWithNewDescription)
+      savedBaseBill.description = bill.description
 
       const periodicBills = this.generatePeriodicBills(savedBaseBill, bill.accountId)
       await this.addManyBillsRepository.addMany(periodicBills)
