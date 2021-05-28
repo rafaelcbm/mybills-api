@@ -3,8 +3,9 @@ import { DbAddBill } from '@/data/usecases'
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS, WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { BillPeriodicityModel, PeriodicityEnum } from '@/domain/models'
-import { mockAddBillRepository, mockAddBillRepositoryResult, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
+import { mockAddBillRepository, mockAddBillRepositoryParams, mockAddBillRepositoryResult, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
 import { mockAddBillParams, mockCategoryModel, mockWalletModel } from '@/tests/domain/mocks'
+import { mockAddBill } from '@/tests/presentation/mocks'
 import faker from 'faker'
 
 type SutTypes = {
@@ -66,7 +67,7 @@ describe('DbAddBill ', () => {
       const { sut , addBillRepositoryStub, addManyBillsRepositoryStub } = makeSut()
       jest.spyOn(sut, 'checkWallet').mockReturnValueOnce(Promise.resolve())
       jest.spyOn(sut, 'checkCategory').mockReturnValueOnce(Promise.resolve())
-      jest.spyOn(addBillRepositoryStub, 'add').mockReturnValueOnce(Promise.resolve(null))
+      jest.spyOn(addBillRepositoryStub, 'add').mockReturnValueOnce(Promise.resolve(mockAddBillRepositoryResult()))
       const periodicBillsFake = [mockAddBillParams(), mockAddBillParams()]
       jest.spyOn(sut, 'generatePeriodicBills').mockReturnValueOnce(periodicBillsFake)
       const addManyBillsSpy = jest.spyOn(addManyBillsRepositoryStub, 'addMany')
