@@ -6,6 +6,7 @@
   "license": "GPL-3.0-or-later",
   "repository": "github:rafael.bmenezes/mybills-api",
   "scripts": {
+    "prestart": "npm run build",
     "start": "node dist/main/server.js",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
