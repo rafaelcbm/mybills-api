@@ -68,6 +68,7 @@ export class DbAddBill implements AddBill {
         date: this.extractDate(baseBill.date, baseBill.periodicity, actualPart),
         value: baseBill.value,
         isDebt: baseBill.isDebt,
+        isPaid: baseBill.isPaid,
         note: baseBill.note,
         periodicity: {
           idReferenceBill: baseBill.id.toString(),

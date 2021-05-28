@@ -19,6 +19,9 @@ export const addBillParamsSchema = {
     isDebt: {
       type: 'boolean'
     },
+    isPaid: {
+      type: 'boolean'
+    },
     note: {
       type: 'string'
     },
@@ -40,5 +43,5 @@ export const addBillParamsSchema = {
       }
     }
   },
-  required: ['walletId','categoryId','description','date','value','isDebt','note']
+  required: ['walletId','categoryId','description','date','value','isDebt', 'isPaid']
 }

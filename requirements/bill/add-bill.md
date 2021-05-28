@@ -4,7 +4,7 @@
 
 1. ✅ Receives a **POST** request on **/api/bills**
 2. ✅ Validates with a request was made by an authorized user
-3. ✅ Validates required fields **walletId**, **categoryId**, **description**, **date**, **value** and **isDebt**.
+3. ✅ Validates required fields **walletId**, **categoryId**, **description**, **date**, **value**, **isDebt**  and **isPaid**.
 4. ✅ **Creates** a bill with provided data:
 ```
      {  
@@ -14,6 +14,7 @@
         date: Date
         value: number
         isDebt: boolean
+        isPaid: boolean
         note?: string
         periodicity?: {          
           type: number // (0 = DAY,  1 = WEEK, 2 = MONTH, 3 = YEAR)

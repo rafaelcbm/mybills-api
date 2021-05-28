@@ -9,7 +9,8 @@ export const makeAddBillValidation = (): ValidationComposite => {
     'description',
     'date',
     'value',
-    'isDebt'
+    'isDebt',
+    'isPaid'
   ]) {
     validations.push(new RequiredFieldValidation(field))
   }

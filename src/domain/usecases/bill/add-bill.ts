@@ -8,6 +8,7 @@ export type AddBillParams = {
   date: Date
   value: number
   isDebt: boolean
+  isPaid: boolean
   note?: string
   periodicity?: BillPeriodicityModel
 }
