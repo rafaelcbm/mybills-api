@@ -6,8 +6,9 @@
 2. ✅ Validates with a request was made by an authorized user
 3. ✅ Validates required field **categoryId**
 4. ✅ **Removes** an category with provided data
-4.1 ✅ It should remove the children categories
-4.2 ❌ It should update the affected bills with the "No category" root category
+    - 4.1 ✅ It should remove the children categories
+    - 4.2 ❌ It should update the affected bills with the "No category" root category
+
 5. ✅ Returns **204** on success, no content
 
 > ## Exceptions
