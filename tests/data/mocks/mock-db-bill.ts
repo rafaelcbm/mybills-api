@@ -21,6 +21,7 @@ export const mockAddBillRepositoryParams = (accountId?: string): AddBillReposito
     date: faker.date.past(5),
     value: faker.random.number(),
     isDebt: faker.random.boolean(),
+    isPaid: faker.random.boolean(),
     note: faker.random.words(),
     periodicity: {
       idReferenceBill: faker.random.word(),
@@ -42,6 +43,7 @@ export const mockAddBillRepositoryResult = (): AddBillRepositoryResult => {
     date: faker.date.past(5),
     value: faker.random.number(),
     isDebt: faker.random.boolean(),
+    isPaid: faker.random.boolean(),
     note: faker.random.words(),
     periodicity: {
       idReferenceBill: faker.random.word(),

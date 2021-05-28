@@ -47,6 +47,7 @@ describe('BillMongoRepository', () => {
       expect(savedBill.date).toEqual(billParam.date)
       expect(savedBill.value).toEqual(billParam.value)
       expect(savedBill.isDebt).toEqual(billParam.isDebt)
+      expect(savedBill.isPaid).toEqual(billParam.isPaid)
       expect(savedBill.note).toEqual(billParam.note)
       expect(savedBill.periodicity).toEqual(billParam.periodicity)
     })

@@ -54,8 +54,8 @@ describe('DbAddBill ', () => {
         date: faker.date.past(5),
         value: faker.random.number(),
         isDebt: faker.random.boolean(),
+        isPaid: faker.random.boolean(),
         note: faker.random.words()
-
       }
 
       await sut.add(addBillParam)
@@ -181,6 +181,7 @@ describe('DbAddBill ', () => {
       expect(periodicBills[0].date).toBeTruthy()
       expect(periodicBills[0].value).toBe(baseBill.value)
       expect(periodicBills[0].isDebt).toBe(baseBill.isDebt)
+      expect(periodicBills[0].isPaid).toBe(baseBill.isPaid)
       expect(periodicBills[0].note).toBe(baseBill.note)
       expect(periodicBills[0].periodicity.idReferenceBill).toBe(baseBill.id)
       expect(periodicBills[0].periodicity.type).toBe(baseBill.periodicity.type)
@@ -194,6 +195,7 @@ describe('DbAddBill ', () => {
       expect(periodicBills[1].date).toBeTruthy()
       expect(periodicBills[1].value).toBe(baseBill.value)
       expect(periodicBills[1].isDebt).toBe(baseBill.isDebt)
+      expect(periodicBills[1].isPaid).toBe(baseBill.isPaid)
       expect(periodicBills[1].note).toBe(baseBill.note)
       expect(periodicBills[1].periodicity.idReferenceBill).toBe(baseBill.id)
       expect(periodicBills[1].periodicity.type).toBe(baseBill.periodicity.type)

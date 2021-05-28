@@ -86,6 +86,7 @@ describe('Bill Routes', () => {
           date: new Date(),
           value: 100,
           isDebt: true,
+          isPaid: true,
           note: 'any_note',
           periodicity: {
             idReferenceBill: null,
@@ -118,6 +119,7 @@ describe('Bill Routes', () => {
           date: new Date(),
           value: 100,
           isDebt: true,
+          isPaid: true,
           note: 'any_note',
           periodicity: {
             idReferenceBill: null,
@@ -150,6 +152,7 @@ describe('Bill Routes', () => {
           date: new Date(),
           value: 100,
           isDebt: true,
+          isPaid: true,
           note: 'any_note',
           periodicity: {
             idReferenceBill: null,
