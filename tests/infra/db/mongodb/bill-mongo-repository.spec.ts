@@ -1,5 +1,7 @@
+import { LoadBillsByMonthRepositoryParams } from '@/data/protocols'
 import { BillMongoRepository, MongoHelper } from '@/infra/db'
 import { mockAddBillRepositoryParams } from '@/tests/data/mocks'
+import { mockAddAccountParams } from '@/tests/domain/mocks'
 import { Collection } from 'mongodb'
 
 let billsCollection: Collection
@@ -9,10 +11,10 @@ const makeSut = (): BillMongoRepository => {
   return new BillMongoRepository()
 }
 
-// const mockAccountId = async (): Promise<string> => {
-//   const res = await accountCollection.insertOne(mockAddAccountParams())
-//   return res.ops[0]._id
-// }
+const mockAccountId = async (): Promise<string> => {
+  const res = await accountCollection.insertOne(mockAddAccountParams())
+  return res.ops[0]._id
+}
 
 describe('BillMongoRepository', () => {
   beforeAll(async () => {
@@ -62,6 +64,42 @@ describe('BillMongoRepository', () => {
 
       const count = await billsCollection.countDocuments()
       expect(count).toBe(2)
+    })
+  })
+
+  describe('loadBills()', () => {
+    test('Should load bills from specific month parameter', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountId()
+      const date1 = new Date(2021, 4, 10) // Month zero based
+      const date2 = new Date(2021, 3, 20)
+      const date3 = new Date(2021, 4, 30)
+      const billParam1 = mockAddBillRepositoryParams(accountId, date1)
+      const billParam2 = mockAddBillRepositoryParams(accountId, date2)
+      const billParam3 = mockAddBillRepositoryParams(accountId, date3)
+
+      await billsCollection.insertMany([billParam1, billParam2, billParam3])
+      console.log([billParam1, billParam2, billParam3])
+
+      const count = await billsCollection.countDocuments()
+      expect(count).toBe(3)
+
+      const params: LoadBillsByMonthRepositoryParams = { accountId, yearMonth: '2021-05' }
+
+      const billsResult = await sut.loadBills(params)
+
+      expect(billsResult.length).toBe(2)
+      expect(billsResult[0].id).toBeTruthy()
+      expect(billsResult[0]).not.toHaveProperty('accountId')
+      expect(billsResult[0].walletId).toEqual(billParam1.walletId)
+      expect(billsResult[0].categoryId).toEqual(billParam1.categoryId)
+      expect(billsResult[0].description).toEqual(billParam1.description)
+      expect(billsResult[0].date).toEqual(billParam1.date)
+      expect(billsResult[0].value).toEqual(billParam1.value)
+      expect(billsResult[0].isDebt).toEqual(billParam1.isDebt)
+      expect(billsResult[0].isPaid).toEqual(billParam1.isPaid)
+      expect(billsResult[0].note).toEqual(billParam1.note)
+      expect(billsResult[0].periodicity).toEqual(billParam1.periodicity)
     })
   })
 })

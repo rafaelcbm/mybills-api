@@ -1,4 +1,4 @@
-import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, AddManyBillsRepositoryParams, LoadBillsByMonthParamsParams, LoadBillsByMonthParamsResult, LoadBillsByMonthRepository } from '@/data/protocols'
+import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, AddManyBillsRepositoryParams, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult, LoadBillsByMonthRepository } from '@/data/protocols'
 import { PeriodicityEnum } from '@/domain/models'
 import { AddBillParams } from '@/domain/usecases'
 import faker from 'faker'
@@ -12,13 +12,13 @@ export const mockAddBillRepository = (): AddBillRepository => {
   return new AddBillRepositoryStub()
 }
 
-export const mockAddBillRepositoryParams = (accountId?: string): AddBillRepositoryParams => {
+export const mockAddBillRepositoryParams = (accountId?: string, date?: Date): AddBillRepositoryParams => {
   return {
     accountId: accountId || faker.random.word(),
     walletId: faker.random.word(),
     categoryId: faker.random.word(),
     description: faker.random.word(),
-    date: faker.date.past(5),
+    date: date || faker.date.past(5),
     value: faker.random.number(),
     isDebt: faker.random.boolean(),
     isPaid: faker.random.boolean(),
@@ -66,14 +66,14 @@ export const mockAddManyBillsRepository = (): AddManyBillsRepository => {
 
 export const mockLoadBillsByMonthRepository = (): LoadBillsByMonthRepository => {
   class LoadBillsByMonthRepositoryStub implements LoadBillsByMonthRepository {
-    async loadBills (params: LoadBillsByMonthParamsParams): Promise<LoadBillsByMonthParamsResult[]> {
+    async loadBills (params: LoadBillsByMonthRepositoryParams): Promise<LoadBillsByMonthRepositoryResult[]> {
       return mockLoadBillsByMonthParamsResult()
     }
   }
   return new LoadBillsByMonthRepositoryStub()
 }
 
-export const mockLoadBillsByMonthParamsResult = (): LoadBillsByMonthParamsResult[] => {
+export const mockLoadBillsByMonthParamsResult = (): LoadBillsByMonthRepositoryResult[] => {
   return [{
     id: faker.random.word(),
     walletId: faker.random.word(),
