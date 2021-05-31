@@ -1,4 +1,4 @@
-import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, AddManyBillsRepositoryParams } from '@/data/protocols'
+import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, AddManyBillsRepositoryParams, LoadBillsByMonthParamsParams, LoadBillsByMonthParamsResult, LoadBillsByMonthRepository } from '@/data/protocols'
 import { PeriodicityEnum } from '@/domain/models'
 import { AddBillParams } from '@/domain/usecases'
 import faker from 'faker'
@@ -62,4 +62,34 @@ export const mockAddManyBillsRepository = (): AddManyBillsRepository => {
     }
   }
   return new AddManyBillsRepositoryStub()
+}
+
+export const mockLoadBillsByMonthRepository = (): LoadBillsByMonthRepository => {
+  class LoadBillsByMonthRepositoryStub implements LoadBillsByMonthRepository {
+    async loadBills (params: LoadBillsByMonthParamsParams): Promise<LoadBillsByMonthParamsResult[]> {
+      return mockLoadBillsByMonthParamsResult()
+    }
+  }
+  return new LoadBillsByMonthRepositoryStub()
+}
+
+export const mockLoadBillsByMonthParamsResult = (): LoadBillsByMonthParamsResult[] => {
+  return [{
+    id: faker.random.word(),
+    walletId: faker.random.word(),
+    categoryId: faker.random.word(),
+    description: faker.random.word(),
+    date: faker.date.past(5),
+    value: faker.random.number(),
+    isDebt: faker.random.boolean(),
+    isPaid: faker.random.boolean(),
+    note: faker.random.words(),
+    periodicity: {
+      idReferenceBill: faker.random.word(),
+      type: PeriodicityEnum.MONTH,
+      interval: faker.random.number(),
+      part: faker.random.number(),
+      endPart: faker.random.number()
+    }
+  }]
 }
