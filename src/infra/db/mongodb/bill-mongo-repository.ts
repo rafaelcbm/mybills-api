@@ -29,6 +29,6 @@ export class BillMongoRepository implements AddBillRepository, AddManyBillsRepos
 
     const sort = { date: 1 }
 
-    return await billCollection.find(query).sort(sort).toArray()
+    return await billCollection.find(query,{ projection: { accountId: 0 } }).sort(sort).toArray()
   }
 }
