@@ -1,4 +1,4 @@
-import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, LoadBillsByMonthParamsParams, LoadBillsByMonthParamsResult, LoadBillsByMonthRepository } from '@/data/protocols/db'
+import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult, LoadBillsByMonthRepository } from '@/data/protocols/db'
 import { AddBillParams } from '@/domain/usecases'
 import { MongoHelper } from '@/infra/db'
 import { ObjectId } from 'bson'
@@ -17,18 +17,19 @@ export class BillMongoRepository implements AddBillRepository, AddManyBillsRepos
     await billCollection.insertMany(billsParam)
   }
 
-  async loadBills (params: LoadBillsByMonthParamsParams): Promise<LoadBillsByMonthParamsResult[]> {
+  async loadBills (params: LoadBillsByMonthRepositoryParams): Promise<LoadBillsByMonthRepositoryResult[]> {
     const billCollection = await MongoHelper.getCollection('bills')
 
-    const pattern = 'YYYY-MM'
+    const pattern = 'yyyy-MM'
     const dateReference = new Date(2000, 1, 1)
 
     const startDate = parse(params.yearMonth, pattern, dateReference)
     const endDate = addMonths(startDate, 1)
     const query = { $and: [{ accountId: new ObjectId(params.accountId) }, { date: { $gte: startDate } }, { date: { $lt: endDate } }] }
-
     const sort = { date: 1 }
 
-    return await billCollection.find(query,{ projection: { accountId: 0 } }).sort(sort).toArray()
+    const result = await billCollection.find(query,{ projection: { accountId: 0 } }).sort(sort).toArray()
+
+    return MongoHelper.mapCollection(result)
   }
 }
