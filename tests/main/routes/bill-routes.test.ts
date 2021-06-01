@@ -165,4 +165,75 @@ describe('Bill Routes', () => {
         .expect(400)
     })
   })
+
+  describe('GET /bills/month/:month', () => {
+    test('Should return 403 on load bills without accessToken', async () => {
+      await request(app)
+        .get('/api/bills/month/2021-05')
+        .expect(403)
+    })
+
+    test('Should return 200 on load bills with valid accessToken', async () => {
+      const { accessToken } = await mockAccessToken()
+      await request(app)
+        .get('/api/bills/month/2021-05')
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
+
+    test('Should return 200 on load bills with data', async () => {
+      const { accessToken, id } = await mockAccessToken()
+
+      const resWallet = await walletCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const walletId = resWallet.ops[0]._id
+
+      const resCategory = await categoryCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const categoryId = resCategory.ops[0]._id
+
+      const resBill = await billCollection.insertOne({
+        accountId: id,
+        walletId: walletId,
+        categoryId: categoryId,
+        description: 'any_description',
+        date: new Date(2021, 4, 10),// Month zero based
+        value: 100,
+        isDebt: true,
+        isPaid: true,
+        note: 'any_note',
+        periodicity: {
+          idReferenceBill: null,
+          type: PeriodicityEnum.MONTH,
+          interval: 1,
+          part: 1,
+          endPart: 3
+        }
+      })
+
+      const insertedBill = resBill.ops[0]
+      expect(insertedBill).toBeTruthy()
+
+      const response = await request(app)
+        .get('/api/bills/month/2021-05')
+        .set('x-access-token', accessToken)
+        .expect(200)
+
+      expect(response.body.length).toBe(1)
+      expect(response.body[0].accountId).toBeUndefined()
+      expect(response.body[0].walletId).toEqual(walletId.toString())
+      expect(response.body[0].categoryId).toEqual(categoryId.toString())
+      expect(response.body[0].description).toEqual('any_description')
+      expect(new Date(response.body[0].date)).toEqual(insertedBill.date)
+      expect(response.body[0].value).toBe(100)
+      expect(response.body[0].isDebt).toBe(true)
+      expect(response.body[0].isPaid).toBe(true)
+      expect(response.body[0].note).toBe('any_note')
+      expect(response.body[0].periodicity).toEqual(insertedBill.periodicity)
+    })
+  })
 })
