@@ -79,7 +79,6 @@ describe('BillMongoRepository', () => {
       const billParam3 = mockAddBillRepositoryParams(accountId, date3)
 
       await billsCollection.insertMany([billParam1, billParam2, billParam3])
-      console.log([billParam1, billParam2, billParam3])
 
       const count = await billsCollection.countDocuments()
       expect(count).toBe(3)

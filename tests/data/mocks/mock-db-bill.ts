@@ -67,13 +67,13 @@ export const mockAddManyBillsRepository = (): AddManyBillsRepository => {
 export const mockLoadBillsByMonthRepository = (): LoadBillsByMonthRepository => {
   class LoadBillsByMonthRepositoryStub implements LoadBillsByMonthRepository {
     async loadBills (params: LoadBillsByMonthRepositoryParams): Promise<LoadBillsByMonthRepositoryResult[]> {
-      return mockLoadBillsByMonthParamsResult()
+      return mockLoadBillsByMonthRepositoryResult()
     }
   }
   return new LoadBillsByMonthRepositoryStub()
 }
 
-export const mockLoadBillsByMonthParamsResult = (): LoadBillsByMonthRepositoryResult[] => {
+export const mockLoadBillsByMonthRepositoryResult = (): LoadBillsByMonthRepositoryResult[] => {
   return [{
     id: faker.random.word(),
     walletId: faker.random.word(),
