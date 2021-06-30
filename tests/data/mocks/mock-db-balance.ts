@@ -46,17 +46,17 @@ export const mockAddBalanceRepositoryParams = (accountId?: string): AddBalanceRe
 
 export const mockUpdateBalanceRepository = (): UpdateBalanceRepository => {
   class UpdateBalanceRepositoryStub implements UpdateBalanceRepository {
-    async update (accountId: string,yearMonth: string, balanceValue: number): Promise<BalanceModel> {
-      return Promise.resolve(mockUpdateBalanceRepositoryResult(accountId))
+    async update (balanceId: string, balanceValue: number): Promise<BalanceModel> {
+      return Promise.resolve(mockUpdateBalanceRepositoryResult())
     }
   }
   return new UpdateBalanceRepositoryStub()
 }
 
-export const mockUpdateBalanceRepositoryResult = (accountId: string): BalanceModel => {
+export const mockUpdateBalanceRepositoryResult = (): BalanceModel => {
   return {
     id: faker.random.word(),
-    accountId: accountId || faker.random.word(),
+    accountId: faker.random.word(),
     yearMonth: faker.random.word(),
     balance: faker.random.number()
   }

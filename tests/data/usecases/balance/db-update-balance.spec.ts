@@ -22,19 +22,17 @@ describe('DbUpdateBalance Usecase', () => {
   test('should call UpdateBalanceRepository with correct values ', async () => {
     const { sut, updateBalanceRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateBalanceRepositoryStub, 'update')
-    const accountId = faker.random.word()
-    const yearMonth = faker.random.word()
+    const balanceId = faker.random.word()
     const balance = faker.random.number()
-    await sut.update(accountId, yearMonth, balance)
-    expect(updateSpy).toHaveBeenCalledWith(accountId, yearMonth, balance)
+    await sut.update(balanceId, balance)
+    expect(updateSpy).toHaveBeenCalledWith(balanceId, balance)
   })
 
   test('should return a valid balance if UpdateBalanceRepository returns', async () => {
     const { sut } = makeSut()
-    const accountId = faker.random.word()
-    const yearMonth = faker.random.word()
+    const balanceId = faker.random.word()
     const balance = faker.random.number()
-    const updatedBalance = await sut.update(accountId, yearMonth, balance)
+    const updatedBalance = await sut.update(balanceId, balance)
     expect(updatedBalance).toBeTruthy()
     expect(updatedBalance.id).toBeTruthy()
     expect(updatedBalance.accountId).toBeTruthy()
@@ -46,11 +44,10 @@ describe('DbUpdateBalance Usecase', () => {
     const { sut, updateBalanceRepositoryStub } = makeSut()
     jest.spyOn(updateBalanceRepositoryStub, 'update').mockImplementationOnce(throwError)
 
-    const accountId = faker.random.word()
-    const yearMonth = faker.random.word()
+    const balanceId = faker.random.word()
     const balance = faker.random.number()
 
-    const promise = sut.update(accountId, yearMonth, balance)
+    const promise = sut.update(balanceId, balance)
     await expect(promise).rejects.toThrow()
   })
 })
