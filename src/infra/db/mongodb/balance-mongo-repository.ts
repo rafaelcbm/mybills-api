@@ -1,7 +1,7 @@
-import { LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult } from '@/data/protocols/db'
+import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult } from '@/data/protocols/db'
 import { MongoHelper } from '@/infra/db'
 
-export class BalanceMongoRepository implements LoadBalanceByMonthRepository {
+export class BalanceMongoRepository implements LoadBalanceByMonthRepository, AddBalanceRepository {
   async loadBalance (params: LoadBalanceByMonthRepositoryParams): Promise<LoadBalanceByMonthRepositoryResult> {
     const billCollection = await MongoHelper.getCollection('balances')
 
@@ -10,5 +10,10 @@ export class BalanceMongoRepository implements LoadBalanceByMonthRepository {
       { projection: { accountId: 0 } })
 
     return result ? MongoHelper.map(result) : result
+  }
+
+  async add (balanceParam: AddBalanceRepositoryParams): Promise<void> {
+    const balanceCollection = await MongoHelper.getCollection('balances')
+    await balanceCollection.insertOne(balanceParam)
   }
 }
