@@ -13,8 +13,8 @@ export class LoadBalanceByMonthController implements Controller {
     if (error) {
       return badRequest(error)
     }
-    const categories = await this.loadBalanceByMonth.loadBalance(request)
-    return ok(categories)
+    const balance = await this.loadBalanceByMonth.loadBalance(request)
+    return ok(balance)
   }
 }
 
