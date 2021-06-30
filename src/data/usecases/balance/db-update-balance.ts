@@ -7,7 +7,7 @@ export class DbUpdateBalance implements UpdateBalance {
     private readonly updateBalanceRepository: UpdateBalanceRepository
   ) {}
 
-  async update (accountId: string,yearMonth: string, balanceValue: number): Promise<BalanceModel> {
-    return this.updateBalanceRepository.update(accountId,yearMonth, balanceValue)
+  async update (balanceId: string, balanceValue: number): Promise<BalanceModel> {
+    return this.updateBalanceRepository.update(balanceId, balanceValue)
   }
 }
