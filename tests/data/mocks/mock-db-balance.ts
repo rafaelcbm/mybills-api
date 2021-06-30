@@ -1,4 +1,5 @@
-import { LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult } from '@/data/protocols'
+import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult } from '@/data/protocols'
+import { AddBalanceParams } from '@/domain/usecases'
 import faker from 'faker'
 
 export const mockLoadBalanceByMonthRepository = (): LoadBalanceByMonthRepository => {
@@ -22,5 +23,22 @@ export const mockLoadBalanceByMonthRepositoryParams = (): LoadBalanceByMonthRepo
   return {
     accountId: faker.random.word(),
     yearMonth: faker.random.word()
+  }
+}
+
+export const mockAddBalanceRepository = (): AddBalanceRepository => {
+  class AddBalanceRepositoryStub implements AddBalanceRepository {
+    async add (addBalanceParams: AddBalanceParams): Promise<void> {
+      return Promise.resolve()
+    }
+  }
+  return new AddBalanceRepositoryStub()
+}
+
+export const mockAddBalanceRepositoryParams = (accountId?: string): AddBalanceRepositoryParams => {
+  return {
+    accountId: accountId || faker.random.word(),
+    yearMonth: faker.random.word(),
+    balance: faker.random.number()
   }
 }
