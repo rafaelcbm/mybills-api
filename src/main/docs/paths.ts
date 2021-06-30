@@ -7,7 +7,8 @@ import {
   categoryParamPath,
   categoryTreePath,
   billPath,
-  billsByMonthPath
+  billsByMonthPath,
+  balanceByMonthPath
 } from './paths/'
 
 export default {
@@ -19,5 +20,6 @@ export default {
   '/categories/{categoryId}': categoryParamPath,
   '/categories/tree': categoryTreePath,
   '/bills': billPath,
-  '/bills/month/{yearMonth}': billsByMonthPath
+  '/bills/month/{yearMonth}': billsByMonthPath,
+  '/balance/month/{yearMonth}': balanceByMonthPath
 }

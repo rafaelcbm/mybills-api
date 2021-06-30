@@ -13,7 +13,8 @@ import {
   categoryTreeSchema,
   addBillParamsSchema,
   billSchema,
-  billsSchema
+  billsSchema,
+  balanceSchema
 } from './schemas/'
 
 export default {
@@ -31,5 +32,6 @@ export default {
   categoriesTree: categoryTreeSchema,
   addBillParams: addBillParamsSchema,
   bill: billSchema,
-  bills: billsSchema
+  bills: billsSchema,
+  balance: balanceSchema
 }
