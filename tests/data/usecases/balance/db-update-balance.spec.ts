@@ -1,9 +1,7 @@
 import { UpdateBalanceRepository } from '@/data/protocols'
 import { DbUpdateBalance } from '@/data/usecases'
-import { GenericBusinessError } from '@/domain/errors'
-import { WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
-import { mockBalanceModel, throwError } from '@/tests/domain/mocks'
 import { mockUpdateBalanceRepository } from '@/tests/data/mocks'
+import { throwError } from '@/tests/domain/mocks'
 import faker from 'faker'
 
 type SutTypes = {
