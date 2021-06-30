@@ -2,6 +2,8 @@ import { LoadBalanceByMonthRepositoryParams } from '@/data/protocols'
 import { BalanceMongoRepository, MongoHelper } from '@/infra/db'
 import { mockAddBalanceRepositoryParams } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
+import FakeObjectId from 'bson-objectid'
+import faker from 'faker'
 import { Collection } from 'mongodb'
 
 let balancesCollection: Collection
@@ -71,6 +73,39 @@ describe('BalanceMongoRepository', () => {
       await sut.add(mockAddBalanceRepositoryParams())
       const count = await balancesCollection.countDocuments()
       expect(count).toBe(1)
+    })
+  })
+
+  describe('update()', () => {
+    test('Should return an updatedBalance on success', async () => {
+      const accountId = await mockAccountId()
+      const balance = {
+        accountId: accountId,
+        yearMonth: faker.random.word(),
+        balance: faker.random.number()
+      }
+
+      const insertBalanceResult = await balancesCollection.insertOne(balance)
+      const insertedBalance = insertBalanceResult.ops[0]
+      expect(insertedBalance._id).toBeTruthy()
+      console.log('insertedBalance._id = ',insertedBalance._id)
+
+      const newBalanceValue = faker.random.number()
+      const sut = makeSut()
+      const updatedBalance = await sut.update(insertedBalance._id,newBalanceValue)
+
+      expect(updatedBalance).toBeTruthy()
+      expect(updatedBalance.id).toEqual(insertedBalance._id)
+      expect(updatedBalance.accountId).toEqual(insertedBalance.accountId)
+      expect(updatedBalance.yearMonth).toEqual(insertedBalance.yearMonth)
+      expect(updatedBalance.balance).toEqual(newBalanceValue)
+    })
+
+    test('Should return undefined if could not find the balance to be updated', async () => {
+      const sut = makeSut()
+      const updatedBalance = await sut.update(FakeObjectId.generate(),faker.random.number())
+
+      expect(updatedBalance).toBeUndefined()
     })
   })
 })
