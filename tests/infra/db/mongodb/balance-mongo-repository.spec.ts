@@ -1,5 +1,6 @@
 import { LoadBalanceByMonthRepositoryParams } from '@/data/protocols'
 import { BalanceMongoRepository, MongoHelper } from '@/infra/db'
+import { mockAddBalanceRepositoryParams } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
 import { Collection } from 'mongodb'
 
@@ -61,6 +62,15 @@ describe('BalanceMongoRepository', () => {
       const balanceResult = await sut.loadBalance(params)
 
       expect(balanceResult).toBeNull()
+    })
+  })
+
+  describe('add()', () => {
+    test('Should add a balance on success', async () => {
+      const sut = makeSut()
+      await sut.add(mockAddBalanceRepositoryParams())
+      const count = await balancesCollection.countDocuments()
+      expect(count).toBe(1)
     })
   })
 })
