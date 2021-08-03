@@ -2,6 +2,7 @@ import { AddBillRepository, AddBillRepositoryResult, AddManyBillsRepository, Loa
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS, WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { BillPeriodicityModel, PeriodicityEnum } from '@/domain/models'
+import { SaveBalancesFromAddedBills } from '@/domain/usecases'
 import { AddBill, AddBillParams } from '@/domain/usecases/bill/add-bill'
 import addDays from 'date-fns/addDays'
 import addMonths from 'date-fns/addMonths'
@@ -13,12 +14,16 @@ export class DbAddBill implements AddBill {
     private readonly loadWalletRepository: LoadWalletsRepository,
     private readonly loadCategoriesRepository: LoadCategoriesRepository,
     private readonly addBillRepository: AddBillRepository,
-    private readonly addManyBillsRepository: AddManyBillsRepository) { }
+    private readonly addManyBillsRepository: AddManyBillsRepository,
+    private readonly saveBalancesFromAddedBills: SaveBalancesFromAddedBills
+  ) { }
 
   async add (bill: AddBillParams): Promise<void> {
     await this.checkWallet(bill)
 
     await this.checkCategory(bill)
+
+    let newBills
 
     if (bill?.periodicity?.endPart > 1) {
       const billWithNewDescription = Object.assign({},bill, { description: bill.description.concat(` ${bill.periodicity.part} - ${bill.periodicity.endPart}`) })
@@ -27,9 +32,14 @@ export class DbAddBill implements AddBill {
 
       const periodicBills = this.generatePeriodicBills(savedBaseBill, bill.accountId)
       await this.addManyBillsRepository.addMany(periodicBills)
+
+      newBills = [billWithNewDescription, ...periodicBills]
     } else {
       await this.addBillRepository.add(bill)
+      newBills = [bill]
     }
+
+    await this.saveBalancesFromAddedBills.saveBalances(newBills)
   }
 
   public async checkWallet (bill: AddBillParams): Promise<void> {
