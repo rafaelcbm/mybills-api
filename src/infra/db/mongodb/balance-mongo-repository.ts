@@ -1,9 +1,10 @@
-import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult, UpdateBalanceRepository } from '@/data/protocols/db'
+import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult, LoadFutureBalancesRepository, LoadLastBalanceRepository, UpdateBalanceRepository } from '@/data/protocols/db'
 import { BalanceModel } from '@/domain/models'
 import { MongoHelper } from '@/infra/db'
 import { ObjectId } from 'mongodb'
 
-export class BalanceMongoRepository implements LoadBalanceByMonthRepository, AddBalanceRepository, UpdateBalanceRepository {
+export class BalanceMongoRepository implements LoadBalanceByMonthRepository, AddBalanceRepository, UpdateBalanceRepository,
+                                      LoadLastBalanceRepository, LoadFutureBalancesRepository {
   async loadBalance (params: LoadBalanceByMonthRepositoryParams): Promise<LoadBalanceByMonthRepositoryResult> {
     const billCollection = await MongoHelper.getCollection('balances')
 
@@ -35,5 +36,25 @@ export class BalanceMongoRepository implements LoadBalanceByMonthRepository, Add
     if (updatedBalance.ok && updatedBalance.value) {
       return MongoHelper.map(updatedBalance.value)
     }
+  }
+
+  async loadLastBalance (accountId: string, yearMonth: string): Promise<BalanceModel> {
+    const billCollection = await MongoHelper.getCollection('balances')
+
+    const result = await billCollection.findOne(
+      { $and: [{ accountId: accountId }, { yearMonth: { $lt: yearMonth } }] },
+      { projection: { accountId: 0 }, sort: { yearMonth: -1 } })
+
+    return result ? MongoHelper.map(result) : result
+  }
+
+  async loadFutureBalances (accountId: string, yearMonth: string): Promise<BalanceModel[]> {
+    const billCollection = await MongoHelper.getCollection('balances')
+
+    const result = await billCollection.find(
+      { $and: [{ accountId: accountId }, { yearMonth: { $gt: yearMonth } }] },
+      { projection: { accountId: 0 } }).toArray()
+
+    return result ? MongoHelper.mapCollection(result) : result
   }
 }
