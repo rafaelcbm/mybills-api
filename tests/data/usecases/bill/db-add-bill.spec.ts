@@ -3,9 +3,9 @@ import { DbAddBill } from '@/data/usecases'
 import { GenericBusinessError } from '@/domain/errors'
 import { CATEGORY_NAME_ALREADY_EXISTS, WALLET_NOT_FOUND } from '@/domain/errors/messages/error-messages'
 import { BillPeriodicityModel, PeriodicityEnum } from '@/domain/models'
-import { mockAddBillRepository, mockAddBillRepositoryParams, mockAddBillRepositoryResult, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
-import { mockAddBillParams, mockCategoryModel, mockWalletModel } from '@/tests/domain/mocks'
-import { mockAddBill } from '@/tests/presentation/mocks'
+import { SaveBalancesFromAddedBills } from '@/domain/usecases'
+import { mockAddBillRepository, mockAddBillRepositoryResult, mockAddManyBillsRepository, mockLoadCategoriesRepository, mockLoadWalletsRepository } from '@/tests/data/mocks'
+import { mockAddBillParams, mockCategoryModel, mockSaveBalancesFromAddedBills, mockWalletModel } from '@/tests/domain/mocks'
 import faker from 'faker'
 
 type SutTypes = {
@@ -14,6 +14,7 @@ type SutTypes = {
   loadCategoriesRepositoryStub: LoadCategoriesRepository
   addBillRepositoryStub: AddBillRepository
   addManyBillsRepositoryStub: AddManyBillsRepository
+  saveBalancesFromAddedBillsStub: SaveBalancesFromAddedBills
 }
 
 const makeSut = (): SutTypes => {
@@ -21,12 +22,14 @@ const makeSut = (): SutTypes => {
   const loadCategoriesRepositoryStub = mockLoadCategoriesRepository()
   const addBillRepositoryStub = mockAddBillRepository()
   const addManyBillsRepositoryStub = mockAddManyBillsRepository()
+  const saveBalancesFromAddedBillsStub = mockSaveBalancesFromAddedBills()
 
   const sut = new DbAddBill(
     loadWalletRepositoryStub,
     loadCategoriesRepositoryStub,
     addBillRepositoryStub,
-    addManyBillsRepositoryStub
+    addManyBillsRepositoryStub,
+    saveBalancesFromAddedBillsStub
   )
 
   return {
@@ -34,7 +37,8 @@ const makeSut = (): SutTypes => {
     loadWalletRepositoryStub,
     loadCategoriesRepositoryStub,
     addBillRepositoryStub,
-    addManyBillsRepositoryStub
+    addManyBillsRepositoryStub,
+    saveBalancesFromAddedBillsStub
   }
 }
 
@@ -77,6 +81,29 @@ describe('DbAddBill ', () => {
       await sut.add(addBillParam)
 
       expect(addManyBillsSpy).toHaveBeenCalledWith(periodicBillsFake)
+    })
+
+    test('should call SaveBalancesFromAddedBills with correct values ', async () => {
+      const { sut , saveBalancesFromAddedBillsStub } = makeSut()
+      jest.spyOn(sut, 'checkWallet').mockReturnValueOnce(Promise.resolve())
+      jest.spyOn(sut, 'checkCategory').mockReturnValueOnce(Promise.resolve())
+      const saveBalancesSpy = jest.spyOn(saveBalancesFromAddedBillsStub, 'saveBalances')
+
+      const addBillParam = {
+        accountId: faker.random.word(),
+        walletId: faker.random.word(),
+        categoryId: faker.random.word(),
+        description: faker.random.word(),
+        date: faker.date.past(5),
+        value: faker.random.number(),
+        isDebt: faker.random.boolean(),
+        isPaid: faker.random.boolean(),
+        note: faker.random.words()
+      }
+
+      await sut.add(addBillParam)
+
+      expect(saveBalancesSpy).toHaveBeenCalledWith([addBillParam])
     })
   })
 
