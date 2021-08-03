@@ -1,4 +1,4 @@
-import { AddBalanceParams, LoadBalanceByMonthResult } from '@/domain/usecases'
+import { AddBalanceParams, LoadBalanceByMonthResult, SaveBalancesFromAddedBills, SaveBalancesFromBillsParams } from '@/domain/usecases'
 import faker from 'faker'
 
 export const mockLoadBalanceByMonthResult = (): LoadBalanceByMonthResult => {
@@ -15,4 +15,13 @@ export const mockAddBalanceParams = (): AddBalanceParams => {
     yearMonth: faker.random.word(),
     balance: faker.random.number()
   }
+}
+
+export const mockSaveBalancesFromAddedBills = (): SaveBalancesFromAddedBills => {
+  class SaveBalancesFromAddedBillsStub implements SaveBalancesFromAddedBills {
+    async saveBalances (billsParams: SaveBalancesFromBillsParams[]): Promise<void> {
+      return Promise.resolve()
+    }
+  }
+  return new SaveBalancesFromAddedBillsStub()
 }
