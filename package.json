@@ -8,6 +8,7 @@
   "scripts": {
     "prestart": "npm run build",
     "start": "node dist/main/server.js",
+    "predebug": "npm run build",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
     "build:watch": "rimraf dist && tsc -p tsconfig-build.json -w",
