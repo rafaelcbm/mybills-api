@@ -14,32 +14,33 @@ export class DbSaveBalancesFromBills implements SaveBalancesFromAddedBills {
   ) {}
 
   async saveBalances (billsParams: SaveBalancesFromBillsParams[]): Promise<void> {
-    billsParams.forEach(async bill => {
-      const loadBalanceByMonthParams: LoadBalanceByMonthParams = { accountId: bill.accountId, yearMonth: getYearMonthFromDate(bill.date) }
+    for (let i = 0; i < billsParams.length; i++) {
+      const loadBalanceByMonthParams: LoadBalanceByMonthParams = { accountId: billsParams[i].accountId, yearMonth: getYearMonthFromDate(billsParams[i].date) }
       const billBalance = await this.loadBalanceByMonthRepository.loadBalance(loadBalanceByMonthParams)
+
       if (billBalance) {
-        const adjustedBalanceValue = this.adjustBalanceService.adjust(billBalance.balance, bill, null, BillOperation.INCLUDE)
+        const adjustedBalanceValue = this.adjustBalanceService.adjust(billBalance.balance, billsParams[i], null, BillOperation.INCLUDE)
         await this.updateBalanceRepository.update(billBalance.id, adjustedBalanceValue)
       } else {
         const newBalance: AddBalanceParams = {
-          accountId: bill.accountId,
+          accountId: billsParams[i].accountId,
           balance: 0,
-          yearMonth: getYearMonthFromDate(bill.date)
+          yearMonth: getYearMonthFromDate(billsParams[i].date)
         }
 
-        const lastBalance = await this.loadLastBalanceRepository.loadLastBalance(bill.accountId, getYearMonthFromDate(bill.date))
+        const lastBalance = await this.loadLastBalanceRepository.loadLastBalance(billsParams[i].accountId, getYearMonthFromDate(billsParams[i].date))
         newBalance.balance = this.adjustBalanceService.adjust(lastBalance ? lastBalance.balance : newBalance.balance,
-          bill, null, BillOperation.INCLUDE)
+          billsParams[i], null, BillOperation.INCLUDE)
 
         await this.addBalanceRepository.add(newBalance)
       }
 
-      const futureBalances = await this.loadFutureBalancesRepository.loadFutureBalances(bill.accountId, getYearMonthFromDate(bill.date))
+      const futureBalances = await this.loadFutureBalancesRepository.loadFutureBalances(billsParams[i].accountId, getYearMonthFromDate(billsParams[i].date))
 
-      futureBalances.forEach(async futureBalance => {
-        futureBalance.balance = this.adjustBalanceService.adjust(futureBalance.balance, bill, null, BillOperation.INCLUDE)
-        await this.updateBalanceRepository.update(futureBalance.accountId, futureBalance.balance)
-      })
-    })
+      for (let j = 0; j < futureBalances.length; j++) {
+        futureBalances[j].balance = this.adjustBalanceService.adjust(futureBalances[j].balance, billsParams[i], null, BillOperation.INCLUDE)
+        await this.updateBalanceRepository.update(futureBalances[j].id, futureBalances[j].balance)
+      }
+    }
   }
 }
