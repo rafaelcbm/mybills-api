@@ -1,4 +1,4 @@
-import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult, LoadFutureBalancesRepository, LoadLastBalanceRepository, UpdateBalanceRepository } from '@/data/protocols'
+import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByIdRepository, LoadBalanceByIdRepositoryParams, LoadBalanceByIdRepositoryResult, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult, LoadFutureBalancesRepository, LoadLastBalanceRepository, UpdateBalanceRepository } from '@/data/protocols'
 import { BalanceModel } from '@/domain/models'
 import { AddBalanceParams } from '@/domain/usecases'
 import { mockBalanceModel } from '@/tests/domain/mocks'
@@ -6,7 +6,7 @@ import faker from 'faker'
 
 export const mockLoadBalanceByMonthRepository = (): LoadBalanceByMonthRepository => {
   class LoadBalanceByMonthRepositoryStub implements LoadBalanceByMonthRepository {
-    async loadBalance (params: LoadBalanceByMonthRepositoryParams): Promise<LoadBalanceByMonthRepositoryResult> {
+    async loadBalance(params: LoadBalanceByMonthRepositoryParams): Promise<LoadBalanceByMonthRepositoryResult> {
       return mockLoadBalanceByMonthRepositoryResult()
     }
   }
@@ -21,9 +21,27 @@ export const mockLoadBalanceByMonthRepositoryResult = (): LoadBalanceByMonthRepo
   }
 }
 
+export const mockLoadBalanceByIdRepository = (): LoadBalanceByIdRepository => {
+  class LoadBalanceByIdRepositoryStub implements LoadBalanceByIdRepository {
+    async loadBalance(params: LoadBalanceByIdRepositoryParams): Promise<LoadBalanceByIdRepositoryResult> {
+      return mockLoadBalanceByIdRepositoryResult()
+    }
+  }
+  return new LoadBalanceByIdRepositoryStub()
+}
+
+export const mockLoadBalanceByIdRepositoryResult = (): LoadBalanceByIdRepositoryResult => {
+  return {
+    id: faker.random.word(),
+    accountId: faker.random.uuid(),
+    yearMonth: faker.random.word(),
+    balance: faker.random.number()
+  }
+}
+
 export const mockAddBalanceRepository = (): AddBalanceRepository => {
   class AddBalanceRepositoryStub implements AddBalanceRepository {
-    async add (addBalanceParams: AddBalanceParams): Promise<void> {
+    async add(addBalanceParams: AddBalanceParams): Promise<void> {
       return Promise.resolve()
     }
   }
@@ -40,7 +58,7 @@ export const mockAddBalanceRepositoryParams = (accountId?: string): AddBalanceRe
 
 export const mockUpdateBalanceRepository = (): UpdateBalanceRepository => {
   class UpdateBalanceRepositoryStub implements UpdateBalanceRepository {
-    async update (balanceId: string, balanceValue: number): Promise<BalanceModel> {
+    async update(balanceId: string, balanceValue: number): Promise<BalanceModel> {
       return Promise.resolve(mockUpdateBalanceRepositoryResult())
     }
   }
@@ -58,7 +76,7 @@ export const mockUpdateBalanceRepositoryResult = (): BalanceModel => {
 
 export const mockLoadLastBalanceRepository = (): LoadLastBalanceRepository => {
   class LoadLastBalanceRepositoryStub implements LoadLastBalanceRepository {
-    async loadLastBalance (accountId: string, yearMonth: string): Promise<BalanceModel> {
+    async loadLastBalance(accountId: string, yearMonth: string): Promise<BalanceModel> {
       return mockBalanceModel()
     }
   }
@@ -67,8 +85,8 @@ export const mockLoadLastBalanceRepository = (): LoadLastBalanceRepository => {
 
 export const mockLoadFutureBalancesRepository = (): LoadFutureBalancesRepository => {
   class LoadFutureBalancesRepositoryStub implements LoadFutureBalancesRepository {
-    async loadFutureBalances (accountId: string, yearMonth: string): Promise<BalanceModel[]> {
-      return [mockBalanceModel(),mockBalanceModel()]
+    async loadFutureBalances(accountId: string, yearMonth: string): Promise<BalanceModel[]> {
+      return [mockBalanceModel(), mockBalanceModel()]
     }
   }
   return new LoadFutureBalancesRepositoryStub()
