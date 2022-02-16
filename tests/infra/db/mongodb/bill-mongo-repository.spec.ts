@@ -1,8 +1,9 @@
-import { LoadBillsByMonthRepositoryParams } from '@/data/protocols'
+import { LoadBillByIdRepositoryParams, LoadBillsByMonthRepositoryParams } from '@/data/protocols'
 import { BillMongoRepository, MongoHelper } from '@/infra/db'
 import { mockAddBillRepositoryParams } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
 import { Collection } from 'mongodb'
+import FakeObjectId from 'bson-objectid'
 
 let billsCollection: Collection
 let accountCollection: Collection
@@ -99,6 +100,45 @@ describe('BillMongoRepository', () => {
       expect(billsResult[0].isPaid).toEqual(billParam1.isPaid)
       expect(billsResult[0].note).toEqual(billParam1.note)
       expect(billsResult[0].periodicity).toEqual(billParam1.periodicity)
+    })
+  })
+
+  describe('loadBillById()', () => {
+    test('Should load a balance by id from valid parameters', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountId()
+
+      const billParam = mockAddBillRepositoryParams(accountId)
+      const savedBill = await sut.add(billParam)
+
+      const count = await billsCollection.countDocuments()
+      expect(count).toBe(1)
+
+      const params: LoadBillByIdRepositoryParams = { accountId, id: savedBill.id }
+
+      const billResult = await sut.loadBillById(params)
+
+      expect(billResult.id).toBeTruthy()
+      expect(billResult).not.toHaveProperty('accountId')
+      expect(billResult.walletId).toEqual(billParam.walletId)
+      expect(billResult.categoryId).toEqual(billParam.categoryId)
+      expect(billResult.description).toEqual(billParam.description)
+      expect(billResult.date).toEqual(billParam.date)
+      expect(billResult.value).toEqual(billParam.value)
+      expect(billResult.isDebt).toEqual(billParam.isDebt)
+      expect(billResult.isPaid).toEqual(billParam.isPaid)
+      expect(billResult.note).toEqual(billParam.note)
+      expect(billResult.periodicity).toEqual(billParam.periodicity)
+    })
+
+    test('Should return null from nonexistent parameters', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountId()
+      const params: LoadBillByIdRepositoryParams = { accountId, id: FakeObjectId.generate() }
+
+      const balanceResult = await sut.loadBillById(params)
+
+      expect(balanceResult).toBeNull()
     })
   })
 })
