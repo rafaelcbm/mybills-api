@@ -6,9 +6,9 @@ import { ObjectId } from 'mongodb'
 export class BalanceMongoRepository implements LoadBalanceByMonthRepository, AddBalanceRepository, UpdateBalanceRepository,
   LoadLastBalanceRepository, LoadFutureBalancesRepository, LoadBalanceByIdRepository {
   async loadBalanceById(params: LoadBalanceByIdRepositoryParams): Promise<BalanceModel> {
-    const billCollection = await MongoHelper.getCollection('balances')
+    const balanceCollection = await MongoHelper.getCollection('balances')
 
-    const result = await billCollection.findOne(
+    const result = await balanceCollection.findOne(
       {
         accountId: params.accountId,
         _id: new ObjectId(params.id)
