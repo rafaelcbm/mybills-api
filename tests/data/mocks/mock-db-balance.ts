@@ -30,7 +30,7 @@ export const mockLoadBalanceByIdRepository = (): LoadBalanceByIdRepository => {
   return new LoadBalanceByIdRepositoryStub()
 }
 
-export const mockLoadBalanceByIdRepositoryResult = (): LoadBalanceByIdRepositoryResult => {
+export const mockLoadBalanceByIdRepositoryResult = (): BalanceModel => {
   return {
     id: faker.random.word(),
     accountId: faker.random.uuid(),
