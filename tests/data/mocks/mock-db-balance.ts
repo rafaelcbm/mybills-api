@@ -1,4 +1,4 @@
-import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByIdRepository, LoadBalanceByIdRepositoryParams, LoadBalanceByIdRepositoryResult, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult, LoadFutureBalancesRepository, LoadLastBalanceRepository, UpdateBalanceRepository } from '@/data/protocols'
+import { AddBalanceRepository, AddBalanceRepositoryParams, LoadBalanceByMonthRepository, LoadBalanceByIdRepository, LoadBalanceByIdRepositoryParams, LoadBalanceByMonthRepositoryParams, LoadBalanceByMonthRepositoryResult, LoadFutureBalancesRepository, LoadLastBalanceRepository, UpdateBalanceRepository } from '@/data/protocols'
 import { BalanceModel } from '@/domain/models'
 import { AddBalanceParams } from '@/domain/usecases'
 import { mockBalanceModel } from '@/tests/domain/mocks'
@@ -23,7 +23,7 @@ export const mockLoadBalanceByMonthRepositoryResult = (): LoadBalanceByMonthRepo
 
 export const mockLoadBalanceByIdRepository = (): LoadBalanceByIdRepository => {
   class LoadBalanceByIdRepositoryStub implements LoadBalanceByIdRepository {
-    async loadBalance(params: LoadBalanceByIdRepositoryParams): Promise<LoadBalanceByIdRepositoryResult> {
+    async loadBalanceById(params: LoadBalanceByIdRepositoryParams): Promise<BalanceModel> {
       return mockLoadBalanceByIdRepositoryResult()
     }
   }

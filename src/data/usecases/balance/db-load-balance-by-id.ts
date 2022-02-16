@@ -7,6 +7,6 @@ export class DbLoadBalanceById implements LoadBalanceById {
   ) { }
 
   async loadBalance(params: LoadBalanceByIdParams): Promise<LoadBalanceByIdResult> {
-    return this.loadBalanceByIdRepository.loadBalance(params)
+    return this.loadBalanceByIdRepository.loadBalanceById(params)
   }
 }

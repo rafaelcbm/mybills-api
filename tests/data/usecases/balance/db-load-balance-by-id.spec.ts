@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
 describe('DbLoadBalanceById Usecase', () => {
   test('should call LoadBalanceByIdRepository with correct values ', async () => {
     const { sut, loadBalanceByIdRepositoryStub } = makeSut()
-    const loadAllSpy = jest.spyOn(loadBalanceByIdRepositoryStub, 'loadBalance')
+    const loadAllSpy = jest.spyOn(loadBalanceByIdRepositoryStub, 'loadBalanceById')
 
     const loadBalanceByIdParams: LoadBalanceByIdParams = {
       accountId: faker.random.word(),
@@ -35,7 +35,7 @@ describe('DbLoadBalanceById Usecase', () => {
 
   test('Should throw if LoadBalanceByIdRepository throws', async () => {
     const { sut, loadBalanceByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadBalanceByIdRepositoryStub, 'loadBalance').mockImplementationOnce(throwError)
+    jest.spyOn(loadBalanceByIdRepositoryStub, 'loadBalanceById').mockImplementationOnce(throwError)
     const loadBalanceByIdParams: LoadBalanceByIdParams = {
       accountId: faker.random.word(),
       id: faker.random.word()

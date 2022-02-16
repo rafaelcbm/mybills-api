@@ -3,8 +3,6 @@ import { LoadBalanceByIdParams } from '@/domain/usecases'
 
 export type LoadBalanceByIdRepositoryParams = LoadBalanceByIdParams
 
-export type LoadBalanceByIdRepositoryResult = BalanceModel
-
 export interface LoadBalanceByIdRepository {
-  loadBalance: (params: LoadBalanceByIdRepositoryParams) => Promise<LoadBalanceByIdRepositoryResult>
+  loadBalanceById: (params: LoadBalanceByIdRepositoryParams) => Promise<BalanceModel>
 }
