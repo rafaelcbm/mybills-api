@@ -1,4 +1,4 @@
-import { LoadBalanceByMonthRepositoryParams } from '@/data/protocols'
+import { LoadBalanceByIdRepositoryParams, LoadBalanceByMonthRepositoryParams } from '@/data/protocols'
 import { BalanceMongoRepository, MongoHelper } from '@/infra/db'
 import { mockAddBalanceRepositoryParams } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
@@ -67,6 +67,43 @@ describe('BalanceMongoRepository', () => {
     })
   })
 
+  describe('loadBalanceById()', () => {
+    test('Should load a balance by id from valid parameters', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountId()
+      const newBalance = {
+        accountId,
+        yearMonth: '2021-05',
+        balance: 123.45
+      }
+
+      const insertBalanceResult = await balancesCollection.insertOne(newBalance)
+      const insertedBalance = insertBalanceResult.ops[0]
+
+      const count = await balancesCollection.countDocuments()
+      expect(count).toBe(1)
+
+      const params: LoadBalanceByIdRepositoryParams = { accountId, id: insertedBalance._id }
+
+      const balanceResult = await sut.loadBalanceById(params)
+
+      expect(balanceResult.id).toBeTruthy()
+      expect(balanceResult.yearMonth).toBe('2021-05')
+      expect(balanceResult.balance).toBe(123.45)
+      expect(balanceResult).not.toHaveProperty('accountId')
+    })
+
+    test('Should return null from nonexistent parameters', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountId()
+      const params: LoadBalanceByIdRepositoryParams = { accountId, id: FakeObjectId.generate() }
+
+      const balanceResult = await sut.loadBalanceById(params)
+
+      expect(balanceResult).toBeNull()
+    })
+  })
+
   describe('add()', () => {
     test('Should add a balance on success', async () => {
       const sut = makeSut()
@@ -91,7 +128,7 @@ describe('BalanceMongoRepository', () => {
 
       const newBalanceValue = faker.random.number()
       const sut = makeSut()
-      const updatedBalance = await sut.update(insertedBalance._id,newBalanceValue)
+      const updatedBalance = await sut.update(insertedBalance._id, newBalanceValue)
 
       expect(updatedBalance).toBeTruthy()
       expect(updatedBalance.id).toEqual(insertedBalance._id)
@@ -102,7 +139,7 @@ describe('BalanceMongoRepository', () => {
 
     test('Should return undefined if could not find the balance to be updated', async () => {
       const sut = makeSut()
-      const updatedBalance = await sut.update(FakeObjectId.generate(),faker.random.number())
+      const updatedBalance = await sut.update(FakeObjectId.generate(), faker.random.number())
 
       expect(updatedBalance).toBeUndefined()
     })
