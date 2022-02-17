@@ -1,9 +1,9 @@
 import { LoadBalanceByMonthRepository, LoadBillByIdRepository, LoadFutureBalancesRepository, UpdateBalanceRepository } from '@/data/protocols'
 import { DbSaveBalancesFromRemovedBill } from '@/data/usecases'
 import { AdjustBalance } from '@/domain/usecases'
-import { getYearMonthFromDate } from '@/domain/util'
-import { mockUpdateBalanceRepository, mockLoadBalanceByMonthRepository, mockLoadBillByIdRepository, mockLoadFutureBalancesRepository, mockLoadLastBalanceRepository } from '@/tests/data/mocks'
-import { mockAdjustBalance } from '@/tests/domain/mocks/mock-balance'
+import { mockUpdateBalanceRepository, mockLoadBalanceByMonthRepository, mockLoadBillByIdRepository, mockLoadFutureBalancesRepository } from '@/tests/data/mocks'
+import { mockAdjustBalance, mockBalanceModel } from '@/tests/domain/mocks/mock-balance'
+
 import faker from 'faker'
 
 type SutTypes = {
@@ -47,13 +47,16 @@ describe('DbSaveBalancesFromRemovedBill saveBalances', () => {
       loadBillByIdRepositoryStub,
       loadBalanceByMonthRepositoryStub,
       adjustBalanceServiceStub,
-      updateBalanceRepositoryStub
+      updateBalanceRepositoryStub,
+      loadFutureBalancesRepositoryStub
     } = makeSut()
 
     const loadBillByIdRepositorySpy = jest.spyOn(loadBillByIdRepositoryStub, 'loadBillById')
     const loadBalanceByMonthSpy = jest.spyOn(loadBalanceByMonthRepositoryStub, 'loadBalance')
     const adjustBalanceSpy = jest.spyOn(adjustBalanceServiceStub, 'adjust')
     const updateBalanceRepositorySpy = jest.spyOn(updateBalanceRepositoryStub, 'update')
+    const loadFutureBalancesRepositorySpy = jest.spyOn(loadFutureBalancesRepositoryStub, 'loadFutureBalances')
+      .mockReturnValue(Promise.resolve([mockBalanceModel(), mockBalanceModel()]))
 
     const saveBalancesFromRemovedBillParams = {
       accountId: faker.random.word(),
@@ -70,7 +73,10 @@ describe('DbSaveBalancesFromRemovedBill saveBalances', () => {
     )
 
     expect(loadBalanceByMonthSpy).toHaveBeenCalled()
-    expect(adjustBalanceSpy).toHaveBeenCalled()
-    expect(updateBalanceRepositorySpy).toHaveBeenCalled()
+    expect(loadFutureBalancesRepositorySpy).toHaveBeenCalled()
+
+    // One time for the bill balance and 2 more times for future balances
+    expect(adjustBalanceSpy).toHaveBeenCalledTimes(3)
+    expect(updateBalanceRepositorySpy).toHaveBeenCalledTimes(3)
   })
 })
