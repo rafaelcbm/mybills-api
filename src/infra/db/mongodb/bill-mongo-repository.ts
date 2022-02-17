@@ -1,4 +1,5 @@
-import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult, LoadBillsByMonthRepository, LoadBillByIdRepository, LoadBillsByIdRepositoryResult, LoadBillByIdRepositoryParams } from '@/data/protocols/db'
+import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, LoadBillByIdRepository, LoadBillByIdRepositoryParams, LoadBillsByIdRepositoryResult, LoadBillsByMonthRepository, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult } from '@/data/protocols/db'
+import { BillModel } from '@/domain/models'
 import { AddBillParams } from '@/domain/usecases'
 import { MongoHelper } from '@/infra/db'
 import { ObjectId } from 'bson'
@@ -44,5 +45,14 @@ export class BillMongoRepository implements AddBillRepository, AddManyBillsRepos
     const result = await billCollection.find(query, { projection: { accountId: 0 } }).sort(sort).toArray()
 
     return MongoHelper.mapCollection(result)
+  }
+
+  async remove(accountId: string, billId: string): Promise<BillModel> {
+    const billCollection = await MongoHelper.getCollection('bills')
+    const removedBill = await billCollection.findOneAndDelete({ _id: new ObjectId(billId), accountId })
+
+    if (removedBill.ok && removedBill.value) {
+      return MongoHelper.map(removedBill.value)
+    }
   }
 }
