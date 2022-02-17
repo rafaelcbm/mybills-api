@@ -20,6 +20,6 @@ export class DbRemoveBill implements RemoveBill {
 
     await this.saveBalancesFromRemovedBill.saveBalances({ accountId: billParam.accountId, billId: billParam.billId })
 
-    await this.removeBillRepository.remove({ accountId: billParam.accountId, billId: bill.id })
+    await this.removeBillRepository.remove(billParam.accountId, bill.id)
   }
 }
