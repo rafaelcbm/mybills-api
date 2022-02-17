@@ -1,6 +1,7 @@
-import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, AddManyBillsRepositoryParams, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult, LoadBillsByMonthRepository, LoadBillByIdRepository, LoadBillByIdRepositoryParams, LoadBillsByIdRepositoryResult } from '@/data/protocols'
+import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, AddManyBillsRepositoryParams, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult, LoadBillsByMonthRepository, LoadBillByIdRepository, LoadBillByIdRepositoryParams, LoadBillsByIdRepositoryResult, RemoveBillRepository } from '@/data/protocols'
 import { BillModel, PeriodicityEnum } from '@/domain/models'
 import { AddBillParams } from '@/domain/usecases'
+import { mockBillModel } from '@/tests/domain/mocks'
 import faker from 'faker'
 
 export const mockAddBillRepository = (): AddBillRepository => {
@@ -122,4 +123,13 @@ export const mockLoadBillByIdRepositoryResult = (): LoadBillsByIdRepositoryResul
       endPart: faker.random.number()
     }
   }
+}
+
+export const mockRemoveBillRepository = (): RemoveBillRepository => {
+  class RemoveBillRepositoryStub implements RemoveBillRepository {
+    async remove(accountId: string, billId: string): Promise<BillModel> {
+      return Promise.resolve(mockBillModel())
+    }
+  }
+  return new RemoveBillRepositoryStub()
 }

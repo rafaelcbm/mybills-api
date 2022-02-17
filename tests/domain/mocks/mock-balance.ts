@@ -1,6 +1,7 @@
 import { AddBalanceParams, AdjustBalance, AdjustBalanceBill, LoadBalanceByMonthResult, SaveBalancesFromAddedBills, SaveBalancesFromBillsParams } from '@/domain/usecases'
 import faker from 'faker'
 import { BalanceModel, BillOperation } from '@/domain/models'
+import { SaveBalancesFromRemovedBill, SaveBalancesFromRemovedBillParams } from '../usecases/balance/save-balances-from-removed-bill'
 
 export const mockLoadBalanceByMonthResult = (): LoadBalanceByMonthResult => {
   return {
@@ -20,7 +21,7 @@ export const mockAddBalanceParams = (): AddBalanceParams => {
 
 export const mockSaveBalancesFromAddedBills = (): SaveBalancesFromAddedBills => {
   class SaveBalancesFromAddedBillsStub implements SaveBalancesFromAddedBills {
-    async saveBalances (billsParams: SaveBalancesFromBillsParams[]): Promise<void> {
+    async saveBalances(billsParams: SaveBalancesFromBillsParams[]): Promise<void> {
       return Promise.resolve()
     }
   }
@@ -38,9 +39,18 @@ export const mockBalanceModel = (): BalanceModel => {
 
 export const mockAdjustBalance = (): AdjustBalance => {
   class AdjustBalanceStub implements AdjustBalance {
-    adjust (balance: number, bill: AdjustBalanceBill, oldBill: AdjustBalanceBill, operation: BillOperation): number {
+    adjust(balance: number, bill: AdjustBalanceBill, oldBill: AdjustBalanceBill, operation: BillOperation): number {
       return faker.random.number()
     }
   }
   return new AdjustBalanceStub()
+}
+
+export const mockSaveBalancesFromRemovedBill = (): SaveBalancesFromRemovedBill => {
+  class SaveBalancesFromRemovedBillStub implements SaveBalancesFromRemovedBill {
+    async saveBalances(billParam: SaveBalancesFromRemovedBillParams): Promise<void> {
+      return Promise.resolve()
+    }
+  }
+  return new SaveBalancesFromRemovedBillStub()
 }
