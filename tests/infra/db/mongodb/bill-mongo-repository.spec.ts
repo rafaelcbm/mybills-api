@@ -141,4 +141,30 @@ describe('BillMongoRepository', () => {
       expect(balanceResult).toBeNull()
     })
   })
+
+  describe('remove()', () => {
+    test('Should remove a bill on success', async () => {
+      const sut = makeSut()
+      const accountId = await mockAccountId()
+      const date1 = new Date(2021, 4, 10) // Month zero based
+      const billParam1 = mockAddBillRepositoryParams(accountId, date1)
+
+      const countBeforeInsert = await billsCollection.countDocuments()
+      expect(countBeforeInsert).toBe(0)
+
+      const res = await billsCollection.insertOne(billParam1)
+      const insertedBill = res.ops[0]
+      const countAfterInsert = await billsCollection.countDocuments()
+      expect(countAfterInsert).toBe(1)
+
+      const removedBill = await sut.remove(accountId, insertedBill._id)
+
+      const countAfterRemove = await billsCollection.countDocuments()
+      expect(countAfterRemove).toBe(0)
+
+      expect(removedBill).toBeTruthy()
+      expect(removedBill.accountId).toEqual(accountId)
+      expect(removedBill.id).toEqual(insertedBill._id)
+    })
+  })
 })
