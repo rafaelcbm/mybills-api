@@ -6,11 +6,13 @@ import faker from 'faker'
 import { sign } from 'jsonwebtoken'
 import { Collection } from 'mongodb'
 import request from 'supertest'
+import FakeObjectId from 'bson-objectid'
 
 let walletCollection: Collection
 let categoryCollection: Collection
 let billCollection: Collection
 let accountCollection: Collection
+let balanceCollection: Collection
 
 const mockAccessToken = async (): Promise<any> => {
   const res = await accountCollection.insertOne({
@@ -46,6 +48,8 @@ describe('Bill Routes', () => {
     await categoryCollection.deleteMany({})
     billCollection = await MongoHelper.getCollection('bills')
     await billCollection.deleteMany({})
+    balanceCollection = await MongoHelper.getCollection('balances')
+    await balanceCollection.deleteMany({})
     accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
@@ -234,6 +238,76 @@ describe('Bill Routes', () => {
       expect(response.body[0].isPaid).toBe(true)
       expect(response.body[0].note).toBe('any_note')
       expect(response.body[0].periodicity).toEqual(insertedBill.periodicity)
+    })
+  })
+
+  describe('DELETE /bills', () => {
+    test('Should return 403 on remove bill without accessToken', async () => {
+      await request(app)
+        .delete('/api/bills/any_id')
+        .send()
+        .expect(403)
+    })
+
+    test('Should return 204 on remove bill with valid accessToken', async () => {
+      const { accessToken, id } = await mockAccessToken()
+
+      const resWallet = await walletCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const walletId = resWallet.ops[0]._id
+
+      const resCategory = await categoryCollection.insertOne({
+        name: faker.random.word(),
+        accountId: id
+      })
+      const categoryId = resCategory.ops[0]._id
+
+      const resBalance = await balanceCollection.insertOne({
+        accountId: id,
+        yearMonth: '2021-05',
+        balance: 123.45
+      })
+
+      const insertedBalance = resBalance.ops[0]
+      expect(insertedBalance).toBeTruthy()
+
+      const resBill = await billCollection.insertOne({
+        accountId: id,
+        walletId: walletId,
+        categoryId: categoryId,
+        description: 'any_description',
+        date: new Date(2021, 4, 21),
+        value: 100,
+        isDebt: true,
+        isPaid: true,
+        note: 'any_note',
+        periodicity: {
+          idReferenceBill: null,
+          type: PeriodicityEnum.MONTH,
+          interval: 1,
+          part: 1,
+          endPart: 3
+        }
+      })
+
+      const billId = resBill.ops[0]._id
+
+      await request(app)
+        .delete(`/api/bills/${billId}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(204)
+    })
+
+    test('Should return 400 on remove bill without billId', async () => {
+      const { accessToken } = await mockAccessToken()
+      await request(app)
+        .delete(`/api/bills/${FakeObjectId.generate()}`)
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(400)
     })
   })
 })
