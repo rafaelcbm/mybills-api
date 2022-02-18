@@ -27,6 +27,7 @@ Rest API to manage personal bills, using TDD, Clean Architecture, Typescript and
 12. [Add Bill](./requirements/bill/add-bill.md)
 13. [Load Bills by month](./requirements/bill/load-bills-by-month.md)
 13. [Load Balance by month](./requirements/bill/load-balance-by-month.md)
+14. [Remove Bill](./requirements/bill/remove-bill.md)
 
 > ## Libraries and Tools
 
