@@ -1,4 +1,4 @@
-import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, LoadBillByIdRepository, LoadBillByIdRepositoryParams, LoadBillsByIdRepositoryResult, LoadBillsByMonthRepository, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult } from '@/data/protocols/db'
+import { AddBillRepository, AddBillRepositoryParams, AddBillRepositoryResult, AddManyBillsRepository, LoadBillByIdRepository, LoadBillByIdRepositoryParams, LoadBillsByIdRepositoryResult, LoadBillsByMonthRepository, LoadBillsByMonthRepositoryParams, LoadBillsByMonthRepositoryResult, RemoveBillRepository } from '@/data/protocols/db'
 import { BillModel } from '@/domain/models'
 import { AddBillParams } from '@/domain/usecases'
 import { MongoHelper } from '@/infra/db'
@@ -6,7 +6,7 @@ import { ObjectId } from 'bson'
 import addMonths from 'date-fns/addMonths'
 import parse from 'date-fns/parse'
 
-export class BillMongoRepository implements AddBillRepository, AddManyBillsRepository, LoadBillsByMonthRepository, LoadBillByIdRepository {
+export class BillMongoRepository implements AddBillRepository, AddManyBillsRepository, LoadBillsByMonthRepository, LoadBillByIdRepository, RemoveBillRepository {
   async loadBillById(params: LoadBillByIdRepositoryParams): Promise<LoadBillsByIdRepositoryResult> {
     const billCollection = await MongoHelper.getCollection('bills')
 
